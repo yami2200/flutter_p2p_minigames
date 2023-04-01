@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TrainingPage extends StatefulWidget {
   const TrainingPage({super.key});
@@ -101,8 +102,8 @@ class _TrainingPage extends State<TrainingPage> {
                     padding: const EdgeInsets.all(8),
                     color: Colors.green[600],
                     child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Mael #5'),
+                      onPressed: () => GoRouter.of(context).push('/safe_landing'),
+                      child: const Text('safe_landing'),
                     ),
                   ),
                 ],

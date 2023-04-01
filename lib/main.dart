@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
 import 'package:go_router/go_router.dart';
 
+import 'games/safe_landing/game.dart';
 import 'main_menu_screen.dart';
 
 void main() {
@@ -20,7 +21,10 @@ class MyApp extends StatelessWidget {
                 path: 'training',
                 builder: (context, state) =>
                 const TrainingPage(key: Key('training page'))),
-          ]),
+
+            GoRoute(path: 'safe_landing', builder: (context, state) => SafeLandingsGameWidget()),
+          ],
+      ),
     ],
   );
 
