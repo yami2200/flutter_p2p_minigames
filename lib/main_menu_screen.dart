@@ -53,9 +53,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     });
   }
 
+  Future<String?> _username = Storage().getUsername();
+  Future<String?> _avatar = Storage().getAvatar();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    /*return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Center(
@@ -69,6 +72,80 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   child: const Text('Training camp'),
                 ),
               ])),
-        ));
+        ));*/
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Frenzy Game"),
+      ),
+      body: Center(
+        child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 20),
+          FutureBuilder<String?>(
+            future: _avatar,
+            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage("assets/avatars/"+snapshot.data!),
+                      radius: 50,
+                    ),
+                    SizedBox(height: 10),
+                    FutureBuilder<String?>(
+                      future: _username,
+                      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(snapshot.data!);
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
+          SizedBox(height: 50),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to Create Room page
+                  },
+                  child: Text("Create Room"),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to Join Room page
+                  },
+                  child: Text("Join Room"),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => GoRouter.of(context).push('/training'),
+                  child: Text("Camp Training"),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 100),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate to Credits page
+            },
+            child: Text("Credits"),
+          ),
+        ],
+      ),
+      ),
+    );
   }
 }

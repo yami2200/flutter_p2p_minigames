@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'Storage.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({ super.key });
 
@@ -28,7 +30,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _save() {
-    // TODO: implement save functionality
+    Storage storage = Storage();
+    storage.setUsername(_usernameController.text);
+    storage.setTAG(_tag);
+    storage.setAvatar('avatar$_avatarIndex.png');
+    GoRouter.of(context).go('/');
   }
 
   @override
