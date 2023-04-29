@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/login_page.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,8 +22,14 @@ class MyApp extends StatelessWidget {
                 path: 'training',
                 builder: (context, state) =>
                 const TrainingPage(key: Key('training page'))),
-
-            GoRoute(path: 'safe_landing', builder: (context, state) => SafeLandingsGameWidget()),
+            GoRoute(
+                path: 'safe_landing',
+                builder: (context, state) =>
+                    SafeLandingsGameWidget()),
+            GoRoute(
+                path: 'login',
+                builder: (context, state) =>
+                const LoginPage(key: Key('login page'))),
           ],
       ),
     ],

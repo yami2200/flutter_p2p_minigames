@@ -1,31 +1,18 @@
 // Copyright 2022, the Flutter project authors. Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class MainMenuScreen extends StatelessWidget {
+import 'Storage.dart';
+
+class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text(
-          'Festival Frenzy',
-          style: TextStyle(fontSize: 30),
-        ),
-        FilledButton(
-          onPressed: () => GoRouter.of(context).push('/training'),
-          child: const Text('Training camp'),
-        ),
-      ])),
-    ));
-  }
+  State<StatefulWidget> createState() => _MainMenuScreenState();
 
   /// Prevents the game from showing game-services-related menu items
   /// until we're sure the player is signed in.
@@ -51,4 +38,37 @@ class MainMenuScreen extends StatelessWidget {
   }
 
   static const _gap = SizedBox(height: 10);
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    Storage storage = Storage();
+    storage.getUsername().then((value) {
+      if (value == null) {
+        GoRouter.of(context).push('/login');
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const Text(
+                  'Festival Frenzy',
+                  style: TextStyle(fontSize: 30),
+                ),
+                FilledButton(
+                  onPressed: () => GoRouter.of(context).push('/training'),
+                  child: const Text('Training camp'),
+                ),
+              ])),
+        ));
+  }
 }
