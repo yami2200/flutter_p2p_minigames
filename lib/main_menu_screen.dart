@@ -138,9 +138,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
           SizedBox(height: 100),
           ElevatedButton(
-            onPressed: () {
-              // Navigate to Credits page
-            },
+            onPressed: () => GoRouter.of(context).push('/credits'),
             child: Text("Credits"),
           ),
         ],

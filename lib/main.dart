@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,10 @@ class MyApp extends StatelessWidget {
                 path: 'login',
                 builder: (context, state) =>
                 const LoginPage(key: Key('login page'))),
+            GoRoute(
+                path: 'credits',
+                builder: (context, state) =>
+                    CreditsPage()),
           ],
       ),
     ],
