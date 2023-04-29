@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'Storage.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({ super.key });
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -15,6 +15,23 @@ class _LoginPageState extends State<LoginPage> {
 
   final _usernameController = TextEditingController();
   String _tag = ''; // initial tag value
+
+  @override
+  void initState() {
+    super.initState();
+    Storage storage = Storage();
+    storage.getUsername().then((value) {
+      if (value != null) {
+        _usernameController.text = value;
+        _updateTag();
+      }
+    });
+    storage.getAvatar().then((value) {
+      if (value != null) {
+        _avatarIndex = int.parse(value.substring(6, value.length - 4));
+      }
+    });
+  }
 
   void _updateTag() {
     String username = _usernameController.text;
