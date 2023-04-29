@@ -42,6 +42,9 @@ class MainMenuScreen extends StatefulWidget {
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
 
+  Future<String?> _username = Storage().getUsername();
+  Future<String?> _avatar = Storage().getAvatar();
+
   @override
   void initState() {
     super.initState();
@@ -51,31 +54,33 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         GoRouter.of(context).push('/login');
       }
     });
+    _refreshUserData();
   }
 
-  Future<String?> _username = Storage().getUsername();
-  Future<String?> _avatar = Storage().getAvatar();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _refreshUserData();
+  }
+
+  Future<void> _refreshUserData() async {
+    final storage = Storage();
+    _username = storage.getUsername();
+    _avatar = storage.getAvatar();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    /*return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text(
-                  'Festival Frenzy',
-                  style: TextStyle(fontSize: 30),
-                ),
-                FilledButton(
-                  onPressed: () => GoRouter.of(context).push('/training'),
-                  child: const Text('Training camp'),
-                ),
-              ])),
-        ));*/
     return Scaffold(
       appBar: AppBar(
-        title: Text("Frenzy Game"),
+        title: Text("Festival Frenzy"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => GoRouter.of(context).push('/login'),
+          ),
+        ],
       ),
       body: Center(
         child:Column(
@@ -136,7 +141,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ],
             ),
           ),
-          SizedBox(height: 100),
+          SizedBox(height: 50),
           ElevatedButton(
             onPressed: () => GoRouter.of(context).push('/credits'),
             child: Text("Credits"),
