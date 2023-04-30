@@ -4,9 +4,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_p2p_minigames/network/PeerToPeer.dart';
+import 'package:flutter_p2p_plus/flutter_p2p_plus.dart';
 import 'package:go_router/go_router.dart';
 
-import 'Storage.dart';
+import 'utils/Storage.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -40,7 +43,7 @@ class MainMenuScreen extends StatefulWidget {
   static const _gap = SizedBox(height: 10);
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen> with WidgetsBindingObserver {
 
   Future<String?> _username = Storage().getUsername();
   Future<String?> _avatar = Storage().getAvatar();
@@ -48,6 +51,32 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   @override
   void initState() {
     super.initState();
+    PeerToPeer peerToPeer = PeerToPeer();
+    peerToPeer.checkPermission().then((value) {
+      log("Location permission granted? : $value");
+      if (!value) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Location Permission Required'),
+            content: Text('Please grant location permission to use this app.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  SystemNavigator.pop();
+                },
+              ),
+            ],
+          ),
+        );
+      } else {
+        WidgetsBinding.instance.addObserver(this);
+        peerToPeer.register();
+      }
+    });
+
     Storage storage = Storage();
     storage.getUsername().then((value) {
       if (value == null) {
@@ -55,6 +84,26 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       }
     });
     _refreshUserData();
+  }
+
+  @override
+  void dispose() {
+    log("dispose called");
+    WidgetsBinding.instance.removeObserver(this);
+    PeerToPeer().unregister();
+    PeerToPeer().disconnect();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    PeerToPeer peerToPeer = PeerToPeer();
+
+    if (state == AppLifecycleState.resumed) {
+      peerToPeer.register();
+    } else if (state == AppLifecycleState.paused) {
+      peerToPeer.unregister();
+    }
   }
 
   @override
@@ -121,22 +170,23 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Create Room page
-                  },
+                  onPressed: () => GoRouter.of(context).push('/create'),
                   child: Text("Create Room"),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Join Room page
-                  },
+                  onPressed: () => GoRouter.of(context).push('/join'),
                   child: Text("Join Room"),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () => GoRouter.of(context).push('/training'),
                   child: Text("Camp Training"),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => GoRouter.of(context).push('/p2pexample'),
+                  child: Text("Test p2p"),
                 ),
               ],
             ),

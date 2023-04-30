@@ -1,3 +1,4 @@
+import 'package:flutter_p2p_minigames/utils/PlayerInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
@@ -49,5 +50,16 @@ class Storage {
 
   setAvatar(String avatar) async {
     await _setStorageValueString("avatar", avatar);
+  }
+
+  Future<PlayerInfo> getPlayerInfo() async {
+    final List<Future<String?>> futures = [
+      getUsername(),
+      getTAG(),
+      getAvatar(),
+    ];
+
+    final List<String?> results = await Future.wait(futures);
+    return PlayerInfo(results[0]!, results[1]!, results[2]!);
   }
 }

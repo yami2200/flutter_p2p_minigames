@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/create_room_page.dart';
+import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
+import 'package:flutter_p2p_minigames/p2p_example.dart';
+import 'package:flutter_p2p_minigames/room_page.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,6 +39,22 @@ class MyApp extends StatelessWidget {
                 path: 'credits',
                 builder: (context, state) =>
                     CreditsPage()),
+            GoRoute(
+                path: 'join',
+                builder: (context, state) =>
+                    JoinRoomPage()),
+            GoRoute(
+                path: 'create',
+                builder: (context, state) =>
+                    CreateRoomPage()),
+            GoRoute(
+                path: 'p2pexample',
+                builder: (context, state) =>
+                    P2PExample()),
+            GoRoute(
+                path: 'room',
+                builder: (context, state) =>
+                    RoomPage()),
           ],
       ),
     ],
