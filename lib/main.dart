@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
+import 'package:flutter_p2p_minigames/games/quiz/QuizPage.dart';
 import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
@@ -45,14 +46,6 @@ class MyApp extends StatefulWidget {
               builder: (context, state) =>
                   CreditsPage()),
           GoRoute(
-              path: 'join',
-              builder: (context, state) =>
-                  JoinRoomPage(isDev: false)),
-          GoRoute(
-              path: 'create',
-              builder: (context, state) =>
-                  CreateRoomPage(isDev: false)),
-          GoRoute(
               path: 'p2pexample',
               builder: (context, state) =>
                   P2PExample()),
@@ -65,13 +58,17 @@ class MyApp extends StatefulWidget {
               builder: (context, state) =>
                   GameHubPage()),
           GoRoute(
-              path: 'join_dev',
+              path: 'join/:opt',
               builder: (context, state) =>
-                  JoinRoomPage(isDev: true)),
+                  JoinRoomPage(isDev: state.params['opt'] == 'dev')),
           GoRoute(
-              path: 'create_dev',
+              path: 'create/:opt',
               builder: (context, state) =>
-                  CreateRoomPage(isDev: true)),
+                  CreateRoomPage(isDev: state.params['opt'] == 'dev')),
+          GoRoute(
+              path: 'quiz/:mode',
+              builder: (context, state) =>
+                  QuizPage(training: state.params['mode'] == 'training')),
         ],
       ),
     ],

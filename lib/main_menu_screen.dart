@@ -122,12 +122,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/create'),
+                  onPressed: () => GoRouter.of(context).push('/create/c'),
                   child: Text("Create Room"),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/join'),
+                  onPressed: () => GoRouter.of(context).push('/join/j'),
                   child: Text("Join Room"),
                 ),
                 SizedBox(height: 10),
@@ -137,12 +137,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 ),
                 SizedBox(height: 10),
                 isDev ? ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/create_dev'),
+                  onPressed: () => GoRouter.of(context).push('/create/dev'),
                   child: Text("Create Room (Dev)"),
                 ) : const SizedBox.shrink(),
                 SizedBox(height: 10),
                 isDev ? ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/join_dev'),
+                  onPressed: () => GoRouter.of(context).push('/join/dev'),
                   child: Text("Join Room (Dev)"),
                 ) : const SizedBox.shrink(),
               ],

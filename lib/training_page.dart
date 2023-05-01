@@ -54,7 +54,7 @@ class _TrainingPage extends State<TrainingPage> {
                     padding: const EdgeInsets.all(8),
                     color: Colors.green[400],
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => GoRouter.of(context).push('/quiz/training'),
                       child: const Text('Capy-Quiz'),
                     ),
                   ),

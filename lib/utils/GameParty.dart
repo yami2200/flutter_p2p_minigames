@@ -9,6 +9,7 @@ class GameParty {
   Connection? _connection;
   List<PlayerInGame> playerList = [];
   PlayerInfo? player;
+  PlayerInfo? opponent;
   List<String> gamesPlayed = [];
   final int maxGames = 5;
   bool gameStarted = false;
@@ -33,6 +34,7 @@ class GameParty {
   void startGame(List<PlayerInfo> players) async{
     player = await Storage().getPlayerInfo();
     playerList = players.map((p) => PlayerInGame(p, 0)).toList();
+    opponent = playerList.firstWhere((p) => p.playerInfo.username != player!.username && p.playerInfo.avatar != player!.avatar).playerInfo;
     gameStarted = true;
     gamesPlayed = [];
   }
