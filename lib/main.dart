@@ -47,11 +47,11 @@ class MyApp extends StatefulWidget {
           GoRoute(
               path: 'join',
               builder: (context, state) =>
-                  JoinRoomPage()),
+                  JoinRoomPage(isDev: false)),
           GoRoute(
               path: 'create',
               builder: (context, state) =>
-                  CreateRoomPage()),
+                  CreateRoomPage(isDev: false)),
           GoRoute(
               path: 'p2pexample',
               builder: (context, state) =>
@@ -64,6 +64,14 @@ class MyApp extends StatefulWidget {
               path: 'hub',
               builder: (context, state) =>
                   GameHubPage()),
+          GoRoute(
+              path: 'join_dev',
+              builder: (context, state) =>
+                  JoinRoomPage(isDev: true)),
+          GoRoute(
+              path: 'create_dev',
+              builder: (context, state) =>
+                  CreateRoomPage(isDev: true)),
         ],
       ),
     ],

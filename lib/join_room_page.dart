@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/main.dart';
 import 'package:flutter_p2p_minigames/network/PeerToPeer.dart';
+import 'package:flutter_p2p_minigames/network/WebSocketConnection.dart';
+import 'package:flutter_p2p_minigames/utils/GameParty.dart';
 import 'package:go_router/go_router.dart';
 
 class JoinRoomPage extends StatefulWidget {
-  const JoinRoomPage({Key? key}) : super(key: key);
+  final bool isDev;
+
+  const JoinRoomPage({Key? key, required this.isDev}) : super(key: key);
 
   @override
   _JoinRoomPageState createState() => _JoinRoomPageState();
@@ -17,14 +21,25 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   @override
   void initState() {
     super.initState();
-    refreshDevices();
-    PeerToPeer().addP2PConnectionListener((change) => setState(() {
-      //isConnected = change.networkInfo.isConnected;
-      if(change.networkInfo.isConnected){
-        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+    if (widget.isDev) {
+      GameParty().setConnection(WebSocketConnection.connectToServer(""));
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey
+            .currentContext;
         ctx!.go("/room");
-      }
-    }));
+      });
+      return;
+    }
+    refreshDevices();
+    PeerToPeer().addP2PConnectionListener((change) =>
+        setState(() {
+          //isConnected = change.networkInfo.isConnected;
+          if (change.networkInfo.isConnected) {
+            BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey
+                .currentContext;
+            ctx!.go("/room");
+          }
+        }));
   }
 
   void refreshDevices(){

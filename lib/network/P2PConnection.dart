@@ -10,7 +10,6 @@ class P2PConnection implements Connection {
   bool isHost = false;
   @override
   List<Function(EventData message)> listeners = [];
-
   var socket;
   bool isOpen = false;
 

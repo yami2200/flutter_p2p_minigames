@@ -12,9 +12,12 @@ import 'package:go_router/go_router.dart';
 
 import 'main.dart';
 import 'network/EventData.dart';
+import 'network/WebSocketConnection.dart';
 
 class CreateRoomPage extends StatefulWidget {
-  const CreateRoomPage({Key? key}) : super(key: key);
+  final bool isDev;
+
+  const CreateRoomPage({Key? key, required this.isDev}) : super(key: key);
 
   @override
   _CreateRoomPageState createState() => _CreateRoomPageState();
@@ -29,24 +32,31 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   void initState() {
     super.initState();
     addPlayerInfo();
+    if(widget.isDev){
+      GameParty().setConnection(WebSocketConnection.createServer());
+      GameParty().connection!.addServerMessageListener(serverMessageHandler);
+      return;
+    }
     peerToPeer.addP2PPeersChangeListener((peers) {
       setState(() {
         devices = peers;
       });
     });
     peerToPeer.addOnServerConnectedEventListener(() {
-      GameParty().connection!.addServerMessageListener((message) {
-        log("Received message: $message");
-        if(message.type == EventType.PLAYER_JOINED.text){
-          PlayerInfo newPlayer = PlayerInfo.fromJson(jsonDecode(message.data));
-          setState(() {
-            playerList.add(newPlayer);
-          });
-          GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_JOINED.text, jsonEncode(playerList[0]))));
-        }
-      });
+      GameParty().connection!.addServerMessageListener(serverMessageHandler);
     });
     peerToPeer.startDiscovery();
+  }
+
+  void serverMessageHandler(EventData message){
+    log("Received message: $message");
+    if(message.type == EventType.PLAYER_JOINED.text){
+      PlayerInfo newPlayer = PlayerInfo.fromJson(jsonDecode(message.data));
+      setState(() {
+        playerList.add(newPlayer);
+      });
+      GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_JOINED.text, jsonEncode(playerList[0]))));
+    }
   }
 
   void addPlayerInfo() async {

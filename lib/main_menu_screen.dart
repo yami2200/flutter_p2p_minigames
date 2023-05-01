@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/utils/Config.dart';
 import 'package:go_router/go_router.dart';
 
 import 'utils/Storage.dart';
@@ -70,6 +71,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDev = Config.devMode;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Festival Frenzy"),
@@ -133,10 +136,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   child: Text("Camp Training"),
                 ),
                 SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/p2pexample'),
-                  child: Text("Test p2p"),
-                ),
+                isDev ? ElevatedButton(
+                  onPressed: () => GoRouter.of(context).push('/create_dev'),
+                  child: Text("Create Room (Dev)"),
+                ) : const SizedBox.shrink(),
+                SizedBox(height: 10),
+                isDev ? ElevatedButton(
+                  onPressed: () => GoRouter.of(context).push('/join_dev'),
+                  child: Text("Join Room (Dev)"),
+                ) : const SizedBox.shrink(),
               ],
             ),
           ),
