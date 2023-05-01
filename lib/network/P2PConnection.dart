@@ -1,28 +1,28 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_p2p_minigames/network/EventData.dart';
 import 'package:flutter_p2p_plus/flutter_p2p_plus.dart';
-
-import '../utils/PlayerInfo.dart';
-import '../utils/Storage.dart';
-import 'EventType.dart';
-import 'EventData.dart';
 import 'Connection.dart';
+import 'EventData.dart';
 
 class P2PConnection implements Connection {
   @override
   bool isHost = false;
   @override
-  List<Function(String p1)> listeners = [];
+  List<Function(EventData message)> listeners = [];
 
   var socket;
   bool isOpen = false;
 
 
   @override
-  void addMessageListener(Function(String p1) listener) {
-    listeners.add(listener);
+  void addServerMessageListener(Function(EventData message) listener) {
+    if(isHost) listeners.add(listener);
+  }
+
+  @override
+  void addClientMessageListener(Function(EventData p1) listener) {
+    if(!isHost) listeners.add(listener);
   }
 
   @override
@@ -36,7 +36,8 @@ class P2PConnection implements Connection {
     socket?.inputStream.listen((data) {
       var msg = utf8.decode(data.data);
       log("Received from ${isHost ? "Client" : "Host"} $msg");
-      listeners.forEach((listener) => listener(msg));
+      EventData eventData = EventData.fromJson(jsonDecode(msg));
+      listeners.forEach((listener) => listener(eventData));
     });
   }
 
@@ -56,7 +57,8 @@ class P2PConnection implements Connection {
       buffer += msg;
       if (data.dataAvailable == 0) {
         log("Data Received from ${isHost ? "Client" : "Host"}: $buffer");
-        listeners.forEach((listener) => listener(buffer));
+        EventData eventData = EventData.fromJson(jsonDecode(buffer));
+        listeners.forEach((listener) => listener(eventData));
         buffer = "";
       }
     });
@@ -82,6 +84,20 @@ class P2PConnection implements Connection {
     if(!isHost){
       socket?.writeString(message);
     }
+  }
+
+  @override
+  void clearMessageListener() {
+    listeners.clear();
+  }
+
+  @override
+  void close() {
+    log("Close socket connection");
+    if(isHost) FlutterP2pPlus.closeHostPort(8000);
+    else FlutterP2pPlus.disconnectFromHost(8000);
+    isOpen = false;
+    isHost = false;
   }
   
 }

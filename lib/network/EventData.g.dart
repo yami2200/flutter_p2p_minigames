@@ -7,15 +7,11 @@ part of 'EventData.dart';
 // **************************************************************************
 
 EventData _$EventDataFromJson(Map<String, dynamic> json) => EventData(
-      $enumDecode(_$EventTypeEnumMap, json['type']),
+      json['type'] as String,
       json['data'] as String,
     );
 
 Map<String, dynamic> _$EventDataToJson(EventData instance) => <String, dynamic>{
-      'type': _$EventTypeEnumMap[instance.type]!,
+      'type': instance.type,
       'data': instance.data,
     };
-
-const _$EventTypeEnumMap = {
-  EventType.PLAYER_JOINED: 'PLAYER_JOINED',
-};

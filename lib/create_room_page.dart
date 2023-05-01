@@ -2,14 +2,15 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_p2p_minigames/games/safe_landing/player.dart';
 import 'package:flutter_p2p_minigames/network/EventType.dart';
 import 'package:flutter_p2p_minigames/network/PeerToPeer.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
 import 'package:flutter_p2p_minigames/utils/PlayerInfo.dart';
 import 'package:flutter_p2p_minigames/utils/Storage.dart';
 import 'package:flutter_p2p_plus/protos/protos.pb.dart';
+import 'package:go_router/go_router.dart';
 
+import 'main.dart';
 import 'network/EventData.dart';
 
 class CreateRoomPage extends StatefulWidget {
@@ -29,24 +30,19 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     super.initState();
     addPlayerInfo();
     peerToPeer.addP2PPeersChangeListener((peers) {
-      log("UI peers listener executed");
-      log(peers.toString());
       setState(() {
         devices = peers;
       });
     });
     peerToPeer.addOnServerConnectedEventListener(() {
-      GameParty().connection!.addMessageListener((message) {
-        Map<String, dynamic> event = jsonDecode(message);
-        EventData eventMessage = EventData.fromJson(event);
+      GameParty().connection!.addServerMessageListener((message) {
         log("Received message: $message");
-        if(eventMessage.type == EventType.PLAYER_JOINED){
-          Map<String, dynamic> eventData = jsonDecode(eventMessage.data);
-          PlayerInfo newPlayer = PlayerInfo.fromJson(eventData);
+        if(message.type == EventType.PLAYER_JOINED.text){
+          PlayerInfo newPlayer = PlayerInfo.fromJson(jsonDecode(message.data));
           setState(() {
             playerList.add(newPlayer);
           });
-          GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_JOINED, jsonEncode(playerList[0]))));
+          GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_JOINED.text, jsonEncode(playerList[0]))));
         }
       });
     });
@@ -58,6 +54,15 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
     setState(() {
       playerList.add(player);
     });
+  }
+
+  void startGame() {
+    if(playerList.length > 1){
+      GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.START_GAME.text, "gogo")));
+      GameParty().startGame(playerList);
+      BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+      ctx!.go("/hub");
+    }
   }
 
   @override
@@ -139,6 +144,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                         title: Text(d.deviceName),
                         subtitle: Text(d.deviceAddress),
                         onTap: () async {
+                          if(playerList.length > 1) return;
                           PeerToPeer().connect(d).then((value) {
                             if(value){
                               setState(() {
@@ -165,7 +171,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
           SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // Code to start the game
+              startGame();
             },
             child: Text('Start game'),
           ),

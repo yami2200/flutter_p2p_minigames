@@ -5,7 +5,7 @@ part 'EventData.g.dart';
 
 @JsonSerializable()
 class EventData {
-  EventType type;
+  String type;
   String data;
 
   EventData(this.type, this.data);

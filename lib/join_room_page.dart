@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/main.dart';
 import 'package:flutter_p2p_minigames/network/PeerToPeer.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,13 +18,12 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   void initState() {
     super.initState();
     refreshDevices();
-    PeerToPeer().addP2PPeersChangeListener((peers) {
-      setState(() {
-        buttonLabels = peers.map((e) => e.deviceName).toList();
-      });
-    });
     PeerToPeer().addP2PConnectionListener((change) => setState(() {
-      isConnected = change.networkInfo.isConnected;
+      //isConnected = change.networkInfo.isConnected;
+      if(change.networkInfo.isConnected){
+        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+        ctx!.go("/room");
+      }
     }));
   }
 

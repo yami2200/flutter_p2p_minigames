@@ -129,11 +129,9 @@ class PeerToPeer {
 
   Future<bool?> disconnect() async {
     log("Disconnect from p2p");
-    bool? result = await FlutterP2pPlus.removeGroup();
     unregister();
-    //socket = null; // TODO: remove connection socket
-    // TODO: reset connections variables
-    //if ((result ?? false)) _isOpen = false;
+    if(GameParty().connection != null) GameParty().connection!.close();
+    bool? result = await FlutterP2pPlus.removeGroup();
     return result;
   }
 

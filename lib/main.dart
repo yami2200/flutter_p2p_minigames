@@ -1,75 +1,140 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
 import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
 import 'package:flutter_p2p_minigames/p2p_example.dart';
+import 'package:flutter_p2p_minigames/party_hub.dart';
 import 'package:flutter_p2p_minigames/room_page.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
 import 'package:go_router/go_router.dart';
 
 import 'games/safe_landing/game.dart';
 import 'main_menu_screen.dart';
+import 'network/PeerToPeer.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  static final _router = GoRouter(
+class MyApp extends StatefulWidget {
+  static final router = GoRouter(
     routes: [
       GoRoute(
-          path: '/',
-          builder: (context, state) =>
-          const MainMenuScreen(key: Key('main menu')),
-          routes: [
-            GoRoute(
-                path: 'training',
-                builder: (context, state) =>
-                const TrainingPage(key: Key('training page'))),
-            GoRoute(
-                path: 'safe_landing',
-                builder: (context, state) =>
-                    SafeLandingsGameWidget()),
-            GoRoute(
-                path: 'login',
-                builder: (context, state) =>
-                const LoginPage(key: Key('login page'))),
-            GoRoute(
-                path: 'credits',
-                builder: (context, state) =>
-                    CreditsPage()),
-            GoRoute(
-                path: 'join',
-                builder: (context, state) =>
-                    JoinRoomPage()),
-            GoRoute(
-                path: 'create',
-                builder: (context, state) =>
-                    CreateRoomPage()),
-            GoRoute(
-                path: 'p2pexample',
-                builder: (context, state) =>
-                    P2PExample()),
-            GoRoute(
-                path: 'room',
-                builder: (context, state) =>
-                    RoomPage()),
-          ],
+        path: '/',
+        builder: (context, state) =>
+        const MainMenuScreen(key: Key('main menu')),
+        routes: [
+          GoRoute(
+              path: 'training',
+              builder: (context, state) =>
+              const TrainingPage(key: Key('training page'))),
+          GoRoute(
+              path: 'safe_landing',
+              builder: (context, state) =>
+                  SafeLandingsGameWidget()),
+          GoRoute(
+              path: 'login',
+              builder: (context, state) =>
+              const LoginPage(key: Key('login page'))),
+          GoRoute(
+              path: 'credits',
+              builder: (context, state) =>
+                  CreditsPage()),
+          GoRoute(
+              path: 'join',
+              builder: (context, state) =>
+                  JoinRoomPage()),
+          GoRoute(
+              path: 'create',
+              builder: (context, state) =>
+                  CreateRoomPage()),
+          GoRoute(
+              path: 'p2pexample',
+              builder: (context, state) =>
+                  P2PExample()),
+          GoRoute(
+              path: 'room',
+              builder: (context, state) =>
+                  RoomPage()),
+          GoRoute(
+              path: 'hub',
+              builder: (context, state) =>
+                  GameHubPage()),
+        ],
       ),
     ],
   );
 
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    PeerToPeer peerToPeer = PeerToPeer();
+    peerToPeer.checkPermission().then((value) {
+      log("Location permission granted? : $value");
+      if (!value) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Location Permission Required'),
+            content: Text('Please grant location permission to use this app.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  SystemNavigator.pop();
+                },
+              ),
+            ],
+          ),
+        );
+      } else {
+        peerToPeer.register();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    log("dispose called");
+    WidgetsBinding.instance.removeObserver(this);
+    PeerToPeer().unregister();
+    PeerToPeer().disconnect();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    PeerToPeer peerToPeer = PeerToPeer();
+
+    if (state == AppLifecycleState.resumed) {
+      peerToPeer.register();
+    } else if (state == AppLifecycleState.paused) {
+      peerToPeer.unregister();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
-      routeInformationProvider: _router.routeInformationProvider,
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
+      title: 'Festival Frenzy',
+      routeInformationProvider: MyApp.router.routeInformationProvider,
+      routeInformationParser: MyApp.router.routeInformationParser,
+      routerDelegate: MyApp.router.routerDelegate,
     );
   }
 }

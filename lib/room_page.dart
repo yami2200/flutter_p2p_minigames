@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
 import 'package:flutter_p2p_minigames/utils/PlayerInfo.dart';
+import 'package:go_router/go_router.dart';
 
+import 'main.dart';
 import 'network/EventData.dart';
 import 'network/EventType.dart';
+import 'network/PeerToPeer.dart';
 import 'utils/Storage.dart';
 
 class RoomPage extends StatefulWidget {
@@ -21,16 +24,19 @@ class _RoomPageState extends State<RoomPage> {
   void initState() {
     super.initState();
     addPlayerInfo();
-    GameParty().connection!.addMessageListener((message) {
-      Map<String, dynamic> event = jsonDecode(message);
-      EventData eventMessage = EventData.fromJson(event);
+    PeerToPeer().clearP2PConnectionListener();
+    PeerToPeer().clearP2PPeersChangeListener();
+    GameParty().connection!.addClientMessageListener((message) {
       log("Received message: $message");
-      if(eventMessage.type == EventType.PLAYER_JOINED){
-        Map<String, dynamic> eventData = jsonDecode(eventMessage.data);
-        PlayerInfo newPlayer = PlayerInfo.fromJson(eventData);
+      if(message.type == EventType.PLAYER_JOINED.text){
+        PlayerInfo newPlayer = PlayerInfo.fromJson(jsonDecode(message.data));
         setState(() {
           playerList.add(newPlayer);
         });
+      } else if(message.type == EventType.START_GAME.text){
+        GameParty().startGame(playerList);
+        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+        ctx!.go("/hub");
       }
     });
     sendPlayerInfoToHost();
@@ -38,7 +44,7 @@ class _RoomPageState extends State<RoomPage> {
 
   void sendPlayerInfoToHost() async {
     PlayerInfo player = await Storage().getPlayerInfo();
-    GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.PLAYER_JOINED, jsonEncode(player))));
+    GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.PLAYER_JOINED.text, jsonEncode(player))));
   }
 
   void addPlayerInfo() async {
