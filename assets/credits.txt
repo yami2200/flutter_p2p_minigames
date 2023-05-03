@@ -1,3 +1,4 @@
-Avatars Assets : AI generated with Bing Creator
-Title font (free) : Coffee Cake
-UI font (free) : Super Bubble
+- Avatars Assets : AI generated with Bing Creator
+- Backgrounds Assets : AI generated with Bing Creator, Upscaled with upscale.media
+- Title font (free) : Coffee Cake
+- UI font (free) : Super Bubble

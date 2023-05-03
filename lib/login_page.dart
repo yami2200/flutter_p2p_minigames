@@ -65,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
         onWillPop: () async => false,
         child:Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromRGBO(254, 223, 176, 1.0),
         title: Text('${_editMode ? 'Edit ' : 'Create '}Profile',
           style: const TextStyle(
