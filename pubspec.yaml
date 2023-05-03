@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   go_router: ^6.5.2
-  flame: ^1.6.0
+  flame: ^1.7.1
   sensors_plus: ^2.0.2
   flutter_p2p_plus: ^1.0.2
   shared_preferences: ^2.1.0
