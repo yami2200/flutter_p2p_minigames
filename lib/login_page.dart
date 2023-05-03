@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
 import 'utils/Storage.dart';
@@ -12,6 +13,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   int _avatarIndex = 0; // initial avatar index
+  bool _editMode = false;
 
   final _usernameController = TextEditingController();
   String _tag = ''; // initial tag value
@@ -22,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     Storage storage = Storage();
     storage.getUsername().then((value) {
       if (value != null) {
+        _editMode = true;
         _usernameController.text = value;
         _updateTag();
       }
@@ -62,62 +65,105 @@ class _LoginPageState extends State<LoginPage> {
         onWillPop: () async => false,
         child:Scaffold(
       appBar: AppBar(
-        title: Text('Create Profile'),
+        backgroundColor: const Color.fromRGBO(254, 223, 176, 1.0),
+        title: Text('${_editMode ? 'Edit ' : 'Create '}Profile',
+          style: const TextStyle(
+            color: Colors.black,
+            fontFamily: 'SuperBubble',
+          ),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/ui/background_profile.jpg'),
+          fit: BoxFit.cover,
+          ),
+        ),
+      child:Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_left),
-                  onPressed: () {
-                    setState(() {
-                      _avatarIndex = (_avatarIndex - 1) % 10;
-                    });
-                  },
-                ),
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/avatars/avatar$_avatarIndex.png'),
-                  backgroundColor: Colors.transparent,
-                  radius: 75,
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_right),
-                  onPressed: () {
-                    setState(() {
-                      _avatarIndex = (_avatarIndex + 1) % 10;
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 32),
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Username',
-                suffixText: 'TAG: $_tag',
+            Card(
+              color: const Color.fromRGBO(254, 223, 176, 0.8),
+              child: Padding(
+              padding: const EdgeInsets.all(16.0),
+                child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_left),
+                        onPressed: () {
+                          setState(() {
+                            _avatarIndex = (_avatarIndex - 1) % 10;
+                          });
+                        },
+                      ),
+                      CircleAvatar(
+                        backgroundImage: AssetImage('assets/avatars/avatar$_avatarIndex.png'),
+                        backgroundColor: Colors.transparent,
+                        radius: 75,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_right),
+                        onPressed: () {
+                          setState(() {
+                            _avatarIndex = (_avatarIndex + 1) % 10;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  TextField(
+                    controller: _usernameController,
+                    cursorColor: const Color.fromRGBO(134, 80, 2, 0.8),
+                    style: const TextStyle(
+                      fontFamily: 'SuperBubble',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      labelStyle: const TextStyle(color: Color.fromRGBO(134, 80, 2, 0.8)),
+                      suffixText: 'TAG: $_tag',
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color:
+                        Color.fromRGBO(134, 80, 2, 0.8)),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      _updateTag();
+                    },
+                  ),
+                ],
               ),
-              onChanged: (value) {
-                _updateTag();
-              },
-            ),
-            Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isSaveButtonDisabled ? null : _save,
-                child: Text('Save'),
               ),
+            ),
+            const Spacer(),
+            FancyButton(
+                size: 30,
+                color: Color(0xFF6B3000),
+                onPressed: () {
+                  if(_usernameController.text.isNotEmpty) _save();
+                  },
+                  child: const Text(
+                  "Save Profile",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontFamily: 'SuperBubble',
+                  ),
+                )
             ),
           ],
         ),
       ),
     ),
+        ),
     );
   }
 }

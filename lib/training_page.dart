@@ -27,8 +27,11 @@ class _TrainingPage extends State<TrainingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(13, 2, 71, 1.0),
-        title: const Text("Training Hub"),
+        backgroundColor: const Color.fromRGBO(13, 2, 71, 1.0),
+        title: const Text("Training Hub",
+          style: TextStyle(
+            fontFamily: 'SuperBubble',
+          ),),
       ),
       body: Container(
       decoration: const BoxDecoration(
