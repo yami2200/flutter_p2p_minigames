@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/utils/Config.dart';
+import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
 import 'utils/Storage.dart';
@@ -74,88 +75,178 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     bool isDev = Config.devMode;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Festival Frenzy"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () => GoRouter.of(context).push('/login'),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/ui/background_menu.jpg'),
+            fit: BoxFit.cover,
           ),
-        ],
-      ),
-      body: Center(
-        child:Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 20),
-          FutureBuilder<String?>(
-            future: _avatar,
-            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-              if (snapshot.hasData) {
-                return Column(
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 50),
+              Image.asset(
+                'assets/ui/title.png',
+                height: 250,
+              ),
+              SizedBox(height: 50),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage("assets/avatars/"+snapshot.data!),
-                      radius: 50,
+                    isDev
+                        ? FancyButton(
+                        size: 30,
+                        color: Color(0xFFCA3034),
+                        onPressed: () => GoRouter.of(context).push('/create/dev'),
+                        child: const Text(
+                          "Create Room (Dev)",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
+                    ) : FancyButton(
+                        size: 30,
+                        color: Color(0xFFCA3034),
+                        onPressed: () => GoRouter.of(context).push('/create/c'),
+                        child: const Text(
+                          "Create Room",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
                     ),
-                    SizedBox(height: 10),
-                    FutureBuilder<String?>(
-                      future: _username,
-                      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data!);
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
+                    SizedBox(height: 15),
+                    isDev
+                        ? FancyButton(
+                      size: 30,
+                      color: Color(0xFFDE6912),
+                        onPressed: () => GoRouter.of(context).push('/join/dev'),
+                      child: const Text(
+                        "Join Room (Dev)",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'SuperBubble',
+                        ),
+                      )
+                    ) : FancyButton(
+                        size: 30,
+                        color: Color(0xFFDE6912),
+                        onPressed: () => GoRouter.of(context).push('/join/c'),
+                        child: const Text(
+                          "Join Room",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
+                    ),
+                    SizedBox(height: 15),
+                    FancyButton(
+                        size: 30,
+                        color: Color(0xFF40CC20),
+                        onPressed: () => GoRouter.of(context).push('/training'),
+                        child: const Text(
+                          "Camp Training",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
                     ),
                   ],
-                );
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          ),
-          SizedBox(height: 50),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ),
+              SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/create/c'),
-                  child: Text("Create Room"),
+                FancyButton(
+                    size: 25,
+                    color: Color(0xFF2439BE),
+                    onPressed: () => GoRouter.of(context).push('/login'),
+                    child: const Text(
+                      "Edit Profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontFamily: 'SuperBubble',
+                      ),
+                    )
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/join/j'),
-                  child: Text("Join Room"),
+                FancyButton(
+                    size: 25,
+                    color: Color(0xFF2439BE),
+                    onPressed: () => GoRouter.of(context).push('/credits'),
+                    child: const Text(
+                      "Credits",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontFamily: 'SuperBubble',
+                      ),
+                    )
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/training'),
-                  child: Text("Camp Training"),
-                ),
-                SizedBox(height: 10),
-                isDev ? ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/create/dev'),
-                  child: Text("Create Room (Dev)"),
-                ) : const SizedBox.shrink(),
-                SizedBox(height: 10),
-                isDev ? ElevatedButton(
-                  onPressed: () => GoRouter.of(context).push('/join/dev'),
-                  child: Text("Join Room (Dev)"),
-                ) : const SizedBox.shrink(),
-              ],
+              ]
             ),
           ),
-          SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () => GoRouter.of(context).push('/credits'),
-            child: Text("Credits"),
+              SizedBox(height: 20),
+            ],
           ),
-        ],
-      ),
+        ),
       ),
     );
+
+    /*
+
+     FutureBuilder<String?>(
+                future: _avatar,
+                builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage("assets/avatars/" + snapshot.data!),
+                          radius: 50,
+                        ),
+                        SizedBox(height: 10),
+                        FutureBuilder<String?>(
+                          future: _username,
+                          builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data!);
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+     */
+
+
   }
 }

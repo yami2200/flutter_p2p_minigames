@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
 class TrainingPage extends StatefulWidget {
@@ -9,110 +10,63 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPage extends State<TrainingPage> {
+  final List<Map<String, String>> buttons = [
+    {"text": "Face Guess", "path": ""},
+    {"text": "Speed run", "path": ""},
+    {"text": "Jungle Jump", "path": ""},
+    {"text": "Capy-Quiz", "path": "/quiz/training"},
+    {"text": "Choose the good side", "path": ""},
+    {"text": "Mael #1", "path": ""},
+    {"text": "Mael #2", "path": ""},
+    {"text": "Mael #3", "path": ""},
+    {"text": "Mael #4", "path": ""},
+    {"text": "safe_landing", "path": "/safe_landing"}
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(13, 2, 71, 1.0),
         title: const Text("Training Hub"),
       ),
-      body: Center(
-        child: CustomScrollView(
-          primary: false,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.all(20),
-              sliver: SliverGrid.count(
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[100],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Face Guess'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[200],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Speed run'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[300],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Jungle Jump'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[400],
-                    child: ElevatedButton(
-                      onPressed: () => GoRouter.of(context).push('/quiz/training'),
-                      child: const Text('Capy-Quiz'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[500],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Choose the good side'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[600],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Mael #1'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[600],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Mael #2'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[600],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Mael #3'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[600],
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Mael #4'),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.green[600],
-                    child: ElevatedButton(
-                      onPressed: () => GoRouter.of(context).push('/safe_landing'),
-                      child: const Text('safe_landing'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+      body: Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/ui/background_menu.jpg'),
+        fit: BoxFit.cover,
         ),
-      )// This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                ...buttons.map(
+                      (button) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: FancyButton(
+                      size: 30,
+                      color: const Color(0xFFCA3034),
+                      onPressed: () => GoRouter.of(context).push(button['path']!),
+                      child: Text(
+                        button['text']!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'SuperBubble',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
-
 }
