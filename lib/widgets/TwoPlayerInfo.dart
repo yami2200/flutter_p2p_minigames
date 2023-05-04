@@ -1,71 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/widgets/PlayerInGameInfo.dart';
 
 import '../utils/PlayerInfo.dart';
 import '../utils/Storage.dart';
 
 class TwoPlayerInfo extends StatelessWidget {
   final String player1Text;
-  final PlayerInfo player2;
-  final String player2Text;
+  final Future<PlayerInfo>? player2;
+  final String? player2Text;
+  final Color? cardColor;
 
   const TwoPlayerInfo({
     Key? key,
     required this.player1Text,
-    required this.player2,
-    required this.player2Text,
+    this.player2,
+    this.player2Text,
+    this.cardColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Future<String?> _tag = Storage().getTAG();
-    Future<String?> _avatar = Storage().getAvatar();
+    Future<PlayerInfo> playerInfo = Storage().getPlayerInfo();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          children: [
-            FutureBuilder<String?>(
-                future: _avatar,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.hasError) {
-                    return const Text('???');
-                  }
-                  final String? avatar = snapshot.data;
-                  return CircleAvatar(
-                    backgroundImage: AssetImage("assets/avatars/${avatar}"),
-                    child: FutureBuilder<String?>(
-                        future: _tag,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.hasError) {
-                            return const Text('???');
-                          }
-                          final String? tag = snapshot.data;
-                          return Text(tag!);
-                        }
+    return Card(
+      color: cardColor ?? const Color.fromRGBO(176, 176, 176, 0.8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+              padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PlayerInGameInfo(playerInfo: playerInfo, playerText: player1Text),
+                  player2 != null
+                      ? PlayerInGameInfo(playerInfo: player2!, playerText: player2Text!)
+                      : const Text("Training Mode",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "SuperBubble",
+                            fontSize: 22,
+                          ),
                     ),
-                  );
-                }
-            ),
-            Text(player1Text),
-          ],
-        ),
-        player2Text != "none" ? Column(
-          children: [
-            CircleAvatar(
-              child: Text(player2.tag),
-              backgroundImage: AssetImage("assets/avatars/${player2.avatar}"),
-            ),
-            Text(player2Text),
-          ],
-        ) : const SizedBox.shrink(),
-      ],
+                ],
+              )
+          ),
+        ],
+      ),
     );
   }
 }
