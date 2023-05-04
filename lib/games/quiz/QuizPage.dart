@@ -1,22 +1,20 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_p2p_minigames/utils/GameParty.dart';
-import 'package:flutter_p2p_minigames/utils/PlayerInfo.dart';
 
 import '../../widgets/FancyButton.dart';
-import '../../widgets/TwoPlayerInfo.dart';
+import '../../widgets/GamePage.dart';
 
-class QuizPage extends StatefulWidget {
-  final bool training;
+class QuizPage extends GamePage {
 
-  const QuizPage({Key? key, required this.training}) : super(key: key);
+  const QuizPage({Key? key, required bool training})
+      : super(bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
+      training: training,
+      background: "assets/ui/background_capyquiz.jpg");
 
   @override
-  _QuizPageState createState() => _QuizPageState();
+  GamePageState createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+class _QuizPageState extends GamePageState {
   int _currentIndex = 0;
   bool _showAnswer = false;
   final List<Map<String, dynamic>> _total_questions = [
@@ -92,8 +90,6 @@ class _QuizPageState extends State<QuizPage> {
     }
   ];
   List<Map<String, dynamic>> _questions = [];
-  final player1 = PlayerInfo("", "", "avatar1.png");
-  final player2 = GameParty().opponent;
 
   @override
   void initState() {
@@ -116,6 +112,103 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   @override
+  List<StatelessWidget> buildWidget(BuildContext context) {
+    final currentQuestion = _questions[_currentIndex];
+    return [
+          const Spacer(),
+          Card(
+            color: const Color.fromRGBO(117, 197, 164, 0.6),
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Question ${_currentIndex + 1} of ${_questions.length}',
+                    style: const TextStyle(
+                        fontSize: 30,
+                        fontFamily: "SuperBubble",
+                        color: Colors.black
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  Text(
+                    currentQuestion['question'],
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: "SuperBubble",
+                        color: Colors.black
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  if (!_showAnswer)
+                    ...currentQuestion['choices']
+                        .map((choice) =>
+                        FancyButton(
+                            size: 25,
+                            color: const Color(0xFA18912F),
+                            onPressed: () {
+                              final bool correct =
+                                  choice == currentQuestion['answer'];
+                              _showResult(correct);
+                            },
+                            child: Text(
+                              "$choice",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontFamily: 'SuperBubble',
+                              ),
+                            )
+                        )
+                    ).toList(),
+                  if (_showAnswer)
+                    Text(
+                      'Your answer is ${currentQuestion['answer'] ==
+                          currentQuestion['choices'][0] ? 'correct' : 'wrong'}',
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                  const SizedBox(height: 16),
+                  if (_showAnswer)
+                    ElevatedButton(
+                      onPressed: _currentIndex == _questions.length - 1
+                          ? () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              AlertDialog(
+                                title: const Text('Quiz finished'),
+                                content: const Text('Congratulations!'),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                        );
+                      }
+                          : _nextQuestion,
+                      child: Text(
+                        _currentIndex == _questions.length - 1
+                            ? 'Finish'
+                            : 'Next',
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const Spacer(),
+        ];
+  }
+
+  /*@override
   Widget build(BuildContext context) {
     final currentQuestion = _questions[_currentIndex];
     return Scaffold(
@@ -231,5 +324,5 @@ class _QuizPageState extends State<QuizPage> {
       ),
       ),
     );
-  }
+  }*/
 }
