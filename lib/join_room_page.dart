@@ -3,6 +3,7 @@ import 'package:flutter_p2p_minigames/main.dart';
 import 'package:flutter_p2p_minigames/network/PeerToPeer.dart';
 import 'package:flutter_p2p_minigames/network/WebSocketConnection.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
+import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
 class JoinRoomPage extends StatefulWidget {
@@ -50,38 +51,53 @@ class _JoinRoomPageState extends State<JoinRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Join a Room'),
+        backgroundColor: const Color.fromRGBO(254, 221, 170, 1.0),
+        title: const Text('Join a Room'),
       ),
-      body: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+          image: AssetImage('assets/ui/background_join.jpg'),
+          fit: BoxFit.cover,
+          ),
+        ),
+        child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Expanded(
+          children: [const Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(top: 25.0),
-                      child: isConnected ? ElevatedButton(
-                        onPressed: () {
-                          PeerToPeer().clearP2PConnectionListener();
-                          PeerToPeer().clearP2PPeersChangeListener();
-                          GoRouter.of(context).go('/room');
-                        },
-                        child: Text('Join the game'),
-                      ) : Text('Waiting for invites...',
+                      child: Text('Waiting for invites...',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                        ),),
+                          fontFamily: 'SuperBubble',
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                refreshDevices();
-              },
-              child: Text('Refresh'),
+            const SizedBox(height: 16.0),
+            FancyButton(
+                size: 30,
+                color: const Color(0xFF172E93),
+                onPressed: () {
+                  refreshDevices();
+                },
+                child: const Text(
+                  "Refresh",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontFamily: 'SuperBubble',
+                  ),
+                )
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
           ],
         ),
+      ),
       ),
     );
   }
