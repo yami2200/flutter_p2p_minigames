@@ -74,6 +74,7 @@ class P2PConnection implements Connection {
   @override
   void sendMessageToClient(String message) {
     if(isHost){
+      log("Sending message to client: $message");
       socket?.writeString(message);
     }
   }
@@ -81,6 +82,7 @@ class P2PConnection implements Connection {
   @override
   void sendMessageToServer(String message) {
     if(!isHost){
+      log("Sending message to server: $message");
       socket?.writeString(message);
     }
   }

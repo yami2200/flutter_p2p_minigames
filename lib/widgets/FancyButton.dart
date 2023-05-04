@@ -76,7 +76,7 @@ class _FancyButtonState extends State<FancyButton> with TickerProviderStateMixin
     if (widget.onPressed != null) {
       _downTicker!.whenComplete(() {
         _animationController!.animateTo(0.0);
-        widget.onPressed?.call();
+        widget.onPressed.call();
       });
     }
   }
