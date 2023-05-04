@@ -66,6 +66,7 @@ class _RoomPageState extends State<RoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Waiting room',
             style: TextStyle(
               fontFamily: 'SuperBubble',
