@@ -14,7 +14,7 @@ class GamePage extends StatefulWidget {
   final bool training;
   final String background;
 
-  const GamePage({required this.bannerColor, required this.training, required this.background});
+  const GamePage({super.key, required this.bannerColor, required this.training, required this.background});
 
   @override
   GamePageState createState() => GamePageState();
@@ -23,6 +23,7 @@ class GamePage extends StatefulWidget {
 class GamePageState extends State<GamePage> {
   String mainPlayerText = "";
   String opponentPlayerText = "";
+  String backgroundImage = "";
   final Completer<PlayerInfo> _myOpponentCompleter = Completer<PlayerInfo>();
   Future<PlayerInfo> get opponentPlayer => _myOpponentCompleter.future;
 
@@ -35,16 +36,23 @@ class GamePageState extends State<GamePage> {
     }
   }
 
+  void setBackgroundImage(String background){
+    setState(() {
+      backgroundImage = background;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    backgroundImage = widget.background;
     if(!widget.training){
       GameParty().connection!.addClientMessageListener((message) {
-        checkIsTextPlayerMessage(message);
+        _checkIsTextPlayerMessage(message);
         onMessageFromClient(message);
       });
       GameParty().connection!.addServerMessageListener((message) {
-        checkIsTextPlayerMessage(message);
+        _checkIsTextPlayerMessage(message);
         onMessageFromServer(message);
       });
       if(GameParty().opponent != null){
@@ -53,7 +61,7 @@ class GamePageState extends State<GamePage> {
     }
   }
 
-  void checkIsTextPlayerMessage(EventData message){
+  void _checkIsTextPlayerMessage(EventData message){
     if(message.type == EventType.PLAYER_PROGESS_TEXT.text){
       setState(() {
         opponentPlayerText = message.data;
@@ -64,6 +72,8 @@ class GamePageState extends State<GamePage> {
   void onMessageFromServer(EventData message) {}
 
   void onMessageFromClient(EventData message) {}
+
+  void onStartGame(){}
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +92,7 @@ class GamePageState extends State<GamePage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(widget.background),
+            image: AssetImage(backgroundImage),
             fit: BoxFit.cover,
         ),
       ),
