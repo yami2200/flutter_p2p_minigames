@@ -86,6 +86,12 @@ class _GamePageTemplateState extends GamePageState {
   // HOW TO QUIT TRAINING
   // quitTraining(); // this will quit the training mode and go back to game list
 
+  // HOW TO HANDLE END OF A MULTIPLAYER GAME
+  // setCurrentPlayerScore(scoreGainFromTheGame); // this will update the current player score and send it to the opponent
+  // once score have been sent and received by both player. The game will automatically go to the hub
+
+  // HOW TO KNOW IF THE OTHER PLAYER HAS FINISHED
+  // receivedScore; // this variable will be set to true once the opponent player has sent you his score (it means he has finished the game)
 
   // Override buildWidget to add widgets to the page
   @override

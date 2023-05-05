@@ -127,6 +127,7 @@ class _QuizPageState extends GamePageState {
       finished = true;
     });
     setMainPlayerText("Finished!\n${_score}/${_questions.length}");
+    setCurrentPlayerScore(_score*(3+(scoreReceived?0:1)));
   }
 
   @override
