@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../main.dart';
 import '../../widgets/FancyButton.dart';
 import '../../widgets/GamePage.dart';
 
@@ -92,6 +94,7 @@ class _QuizPageState extends GamePageState {
     }
   ];
   List<Map<String, dynamic>> _questions = [];
+  bool finished = false;
 
   @override
   void initState() {
@@ -119,9 +122,23 @@ class _QuizPageState extends GamePageState {
     updatePlayerText();
   }
 
+  void _finishGame(){
+    setState(() {
+      finished = true;
+    });
+    setMainPlayerText("Finished!\n${_score}/${_questions.length}");
+  }
+
   @override
   void onStartGame(){
     updatePlayerText();
+  }
+
+  void _quitTraining(){
+    if(widget.training){
+      BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+      ctx!.go("/training");
+    }
   }
 
   void updatePlayerText(){
@@ -140,8 +157,9 @@ class _QuizPageState extends GamePageState {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Question ${_currentIndex + 1} of ${_questions.length}',
+                  if(!(finished && widget.training)) Text(
+                    finished ? "Finished ! Waiting your opponent." : 'Question ${_currentIndex + 1} of ${_questions.length}',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 30,
                         fontFamily: "SuperBubble",
@@ -149,7 +167,7 @@ class _QuizPageState extends GamePageState {
                     ),
                   ),
                   const SizedBox(height: 25),
-                  Text(
+                  if(!_showAnswer && !finished) Text(
                     currentQuestion['question'],
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -159,39 +177,60 @@ class _QuizPageState extends GamePageState {
                     ),
                   ),
                   const SizedBox(height: 25),
-                  if (!_showAnswer)
+                  if (!_showAnswer && !finished)
                     ...currentQuestion['choices']
                         .map((choice) =>
-                        FancyButton(
-                            size: 25,
-                            color: const Color(0xFA18912F),
-                            onPressed: () {
-                              final bool correct =
-                                  choice == currentQuestion['answer'];
-                              _showResult(correct);
-                            },
-                            child: Text(
-                              "$choice",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontFamily: 'SuperBubble',
-                              ),
-                            )
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FancyButton(
+                              size: 25,
+                              color: const Color(0xFA18912F),
+                              onPressed: () {
+                                final bool correct =
+                                    choice == currentQuestion['answer'];
+                                _showResult(correct);
+                              },
+                              child: Text(
+                                "$choice",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  fontFamily: 'SuperBubble',
+                                ),
+                              )
+                          ),
                         )
                     ).toList(),
-                  if (_showAnswer)
+                  if (_showAnswer || finished)
                     Text(
-                      'Your answer is ${_correctAnswer ? 'correct' : 'wrong'}',
+                      finished ? "Your score : ${_score}/${_questions.length}" : 'Your answer is ${_correctAnswer ? 'correct' : 'wrong'}',
                       style: const TextStyle(
                           fontSize: 24,
                           fontFamily: "SuperBubble"
                       ),
                     ),
                   const SizedBox(height: 16),
-                  if (_showAnswer)
-                    ElevatedButton(
+                  if (_showAnswer && (!finished || widget.training))
+                    FancyButton(
+                        size: 25,
+                        color: const Color(0xFA18912F),
+                        onPressed: _currentIndex == _questions.length - 1
+                            ? (finished ? _quitTraining : _finishGame )
+                            : _nextQuestion,
+                        child: Text(
+                          _currentIndex == _questions.length - 1
+                              ? (finished ? "Quit" : 'Finish' )
+                              : 'Next',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
+                    ),
+                    /*ElevatedButton(
                       onPressed: _currentIndex == _questions.length - 1
                           ? () {
                         showDialog(
@@ -218,7 +257,7 @@ class _QuizPageState extends GamePageState {
                             ? 'Finish'
                             : 'Next',
                       ),
-                    ),
+                    ),*/
                 ],
               ),
             ),
