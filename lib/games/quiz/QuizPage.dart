@@ -16,7 +16,9 @@ class QuizPage extends GamePage {
 
 class _QuizPageState extends GamePageState {
   int _currentIndex = 0;
+  int _score = 0;
   bool _showAnswer = false;
+  bool _correctAnswer = false;
   final List<Map<String, dynamic>> _total_questions = [
     {
       'question': 'What is the scientific name for capybaras?',
@@ -101,7 +103,12 @@ class _QuizPageState extends GamePageState {
   void _showResult(bool correct) {
     setState(() {
       _showAnswer = true;
+      _correctAnswer = correct;
     });
+    if(correct){
+      _score++;
+      updatePlayerText();
+    }
   }
 
   void _nextQuestion() {
@@ -109,6 +116,16 @@ class _QuizPageState extends GamePageState {
       _currentIndex++;
       _showAnswer = false;
     });
+    updatePlayerText();
+  }
+
+  @override
+  void onStartGame(){
+    updatePlayerText();
+  }
+
+  void updatePlayerText(){
+    setMainPlayerText("Question ${_currentIndex + 1}\n${_score}/${_questions.length}");
   }
 
   @override
@@ -166,9 +183,11 @@ class _QuizPageState extends GamePageState {
                     ).toList(),
                   if (_showAnswer)
                     Text(
-                      'Your answer is ${currentQuestion['answer'] ==
-                          currentQuestion['choices'][0] ? 'correct' : 'wrong'}',
-                      style: const TextStyle(fontSize: 24),
+                      'Your answer is ${_correctAnswer ? 'correct' : 'wrong'}',
+                      style: const TextStyle(
+                          fontSize: 24,
+                          fontFamily: "SuperBubble"
+                      ),
                     ),
                   const SizedBox(height: 16),
                   if (_showAnswer)

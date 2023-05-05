@@ -55,14 +55,14 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   }
 
   void serverMessageHandler(EventData message){
-    log("Received message: $message");
     if(message.type == EventType.PLAYER_JOINED.text){
       PlayerInfo newPlayer = PlayerInfo.fromJson(jsonDecode(message.data));
       _myOpponentCompleter.complete(newPlayer);
       _playerInfo.then((value) {
         GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_JOINED.text, jsonEncode(value))));
       });
-
+    } else if(message.type == EventType.READY.text){
+      openHub();
     }
   }
 
@@ -76,7 +76,6 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
       final results = await Future.wait(futures);
       List<PlayerInfo> playerList = results;
       GameParty().startGame(playerList);
-      openHub();
     }
   }
 

@@ -1,7 +1,9 @@
 enum EventType {
   PLAYER_JOINED(text: "PLAYER_JOINED"),
   START_GAME(text: "START_GAME"),
-  PLAYER_PROGESS_TEXT(text: "PLAYER_PROGESS_TEXT");
+  PLAYER_PROGESS_TEXT(text: "PLAYER_PROGESS_TEXT"),
+  READY(text: "READY"),
+  NEXT_GAME(text: "NEXT_GAME");
 
   const EventType({required this.text});
 

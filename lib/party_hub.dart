@@ -1,9 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+import "dart:developer" as dev;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/utils/GameInfo.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
 import 'package:flutter_p2p_minigames/utils/PlayerInGame.dart';
 import 'package:flutter_p2p_minigames/widgets/PlayerScoresRow.dart';
+import 'package:go_router/go_router.dart';
+
+import 'main.dart';
+import 'network/EventData.dart';
+import 'network/EventType.dart';
 
 class GameHubPage extends StatefulWidget {
   const GameHubPage({Key? key}) : super(key: key);
@@ -13,11 +22,65 @@ class GameHubPage extends StatefulWidget {
 }
 
 class _GameHubPageState extends State<GameHubPage> {
-  int _gamesPlayed = GameParty().gamesPlayed.length;
+  final int _gamesPlayed = GameParty().gamesPlayed;
   final int _totalGames = GameParty().maxGames;
   final List<PlayerInGame> _players = GameParty().playerList;
   int _countdown = GameParty().timeBetweenGames;
+  GameInfo? nextGame = null;
   Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    GameParty().connection!.clearMessageListener();
+    if(GameParty().isServer()) {
+      nextGame = GameParty().getNextGame();
+      GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.NEXT_GAME.text, jsonEncode(nextGame))));
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _countdown -= 1;
+        });
+        if (_countdown == 0) {
+          timer.cancel();
+        }
+      });
+    }
+    GameParty().connection!.addClientMessageListener((message) {
+      if(message.type == EventType.NEXT_GAME.text){
+        setState(() {
+          nextGame = GameInfo.fromJson(jsonDecode(message.data));
+        });
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          setState(() {
+            _countdown -= 1;
+          });
+          if (_countdown == 0) {
+            timer.cancel();
+            if(!GameParty().isServer()){
+              BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+              ctx!.go(nextGame!.path);
+            }
+          }
+        });
+      }
+    });
+    GameParty().connection!.addServerMessageListener((message) {
+      if(message.type == EventType.READY.text){
+        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+        ctx!.go(nextGame!.path);
+      }
+    });
+    dev.log("Listener Setup");
+    GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.READY.text, "ready")));
+  }
+
+  @override
+  void dispose() {
+    if(_timer != null){
+      _timer!.cancel();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +139,23 @@ class _GameHubPageState extends State<GameHubPage> {
               padding: const EdgeInsets.all(20.0),
               child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Next game',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
                         fontFamily: 'SuperBubble',
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
+                    Text(
+                      (nextGame == null ? '' : '${nextGame!.name}: ${nextGame!.description}'),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontFamily: 'SuperBubble',
+                      ),
+                    ),
                   ]),
             ),
           ),
@@ -106,27 +177,5 @@ class _GameHubPageState extends State<GameHubPage> {
     ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Simulate changing data
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _countdown -= 1;
-      });
-      if (_countdown == 0) {
-        timer.cancel();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    if(_timer != null){
-      _timer!.cancel();
-    }
-    super.dispose();
   }
 }

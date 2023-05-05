@@ -59,10 +59,10 @@ class _GamePageTemplateState extends GamePageState {
   // HOW TO SET BACKGROUND IMAGE (only for the current player)
   // setBackgroundImage("assets/ui/background.jpg"); // this will update the background image for the current player
 
-  // HOW TO SEND A MESSAGE TO THE SERVER
+  // HOW TO SEND A MESSAGE TO THE SERVER (if you are the client)
   // GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.YOUR_TYPE.text, jsonEncode(data)))); // this will send a message to the server
 
-  // HOW TO SEND A MESSAGE TO THE CLIENT
+  // HOW TO SEND A MESSAGE TO THE CLIENT (if you are the server)
   // GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.YOUR_TYPE.text, jsonEncode(data)))); // this will send a message to the client
 
   // HOW TO GET THE OPPONENT PLAYER INFO
@@ -79,6 +79,9 @@ class _GamePageTemplateState extends GamePageState {
 
   // HOW TO GET THE CURRENT PLAYER TEXT PROGRESSION
   // mainPlayerText;
+
+  // HOW TO KNOW IF WE ARE THE SERVER
+  // GameParty().isServer(); // this will return true if we are the server
 
 
   // Override buildWidget to add widgets to the page

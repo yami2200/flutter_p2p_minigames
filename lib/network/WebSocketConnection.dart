@@ -33,7 +33,7 @@ class WebSocketConnection implements Connection {
     socket = channel;
     socket.sink.add("host");
     channel.stream.listen((data) {
-      log("received : "+data);
+      log("WS Connection : received : "+data+" for listeners : "+listeners.length.toString());
       EventData eventData = EventData.fromJson(jsonDecode(data));
       listeners.forEach((listener) => listener(eventData));
       },
@@ -46,7 +46,7 @@ class WebSocketConnection implements Connection {
     socket = channel;
     socket.sink.add("client");
     channel.stream.listen((data) {
-        log("received : "+data);
+        log("WS Connection : received : "+data+" for listeners : "+listeners.length.toString());
         EventData eventData = EventData.fromJson(jsonDecode(data));
         listeners.forEach((listener) => listener(eventData));
       },
@@ -56,16 +56,23 @@ class WebSocketConnection implements Connection {
 
   @override
   void addClientMessageListener(Function(EventData p1) listener) {
-    if(!isHost) listeners.add(listener);
+    if(!isHost) {
+      log("add listener as client");
+      listeners.add(listener);
+    }
   }
 
   @override
   void addServerMessageListener(Function(EventData p1) listener) {
-    if(isHost) listeners.add(listener);
+    if(isHost) {
+      log("add listener as server");
+      listeners.add(listener);
+    }
   }
 
   @override
   void clearMessageListener() {
+    log("clear listeners");
     listeners.clear();
   }
 

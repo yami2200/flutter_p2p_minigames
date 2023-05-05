@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../main.dart';
 import '../network/EventData.dart';
 import '../network/EventType.dart';
 import '../utils/GameParty.dart';
@@ -33,6 +35,7 @@ class GamePageState extends State<GamePage> {
     });
     if(!widget.training){
       GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.PLAYER_PROGESS_TEXT.text, text)));
+      GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.PLAYER_PROGESS_TEXT.text, text)));
     }
   }
 
@@ -47,17 +50,30 @@ class GamePageState extends State<GamePage> {
     super.initState();
     backgroundImage = widget.background;
     if(!widget.training){
+      GameParty().connection!.clearMessageListener();
       GameParty().connection!.addClientMessageListener((message) {
         _checkIsTextPlayerMessage(message);
-        onMessageFromClient(message);
+        _checkIsReadyMessage(message);
+        onMessageFromServer(message);
       });
       GameParty().connection!.addServerMessageListener((message) {
         _checkIsTextPlayerMessage(message);
-        onMessageFromServer(message);
+        onMessageFromClient(message);
       });
       if(GameParty().opponent != null){
         _myOpponentCompleter.complete(GameParty().opponent!);
       }
+      GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.READY.text, "ready")));
+      GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.READY.text, "ready")));
+      if(GameParty().isServer()){
+        Future.delayed(const Duration(milliseconds: 150), () {
+          onStartGame();
+        });
+      }
+    } else {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        onStartGame();
+      });
     }
   }
 
@@ -66,6 +82,17 @@ class GamePageState extends State<GamePage> {
       setState(() {
         opponentPlayerText = message.data;
       });
+    }
+  }
+
+  void _checkIsReadyMessage(EventData message){
+    if(message.type == EventType.READY.text){
+      if(GameParty().isServer()) {
+        BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+        ctx!.go("/hub");
+      } else {
+        onStartGame();
+      }
     }
   }
 
