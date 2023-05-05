@@ -96,6 +96,13 @@ class GamePageState extends State<GamePage> {
     }
   }
 
+  void quitTraining(){
+    if(widget.training){
+      BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+      ctx!.go("/training");
+    }
+  }
+
   void onMessageFromServer(EventData message) {}
 
   void onMessageFromClient(EventData message) {}

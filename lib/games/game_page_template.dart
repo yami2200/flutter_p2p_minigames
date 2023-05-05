@@ -83,6 +83,9 @@ class _GamePageTemplateState extends GamePageState {
   // HOW TO KNOW IF WE ARE THE SERVER
   // GameParty().isServer(); // this will return true if we are the server
 
+  // HOW TO QUIT TRAINING
+  // quitTraining(); // this will quit the training mode and go back to game list
+
 
   // Override buildWidget to add widgets to the page
   @override

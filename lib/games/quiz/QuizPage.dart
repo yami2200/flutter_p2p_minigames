@@ -134,13 +134,6 @@ class _QuizPageState extends GamePageState {
     updatePlayerText();
   }
 
-  void _quitTraining(){
-    if(widget.training){
-      BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
-      ctx!.go("/training");
-    }
-  }
-
   void updatePlayerText(){
     setMainPlayerText("Question ${_currentIndex + 1}\n${_score}/${_questions.length}");
   }
@@ -216,7 +209,7 @@ class _QuizPageState extends GamePageState {
                         size: 25,
                         color: const Color(0xFA18912F),
                         onPressed: _currentIndex == _questions.length - 1
-                            ? (finished ? _quitTraining : _finishGame )
+                            ? (finished ? quitTraining : _finishGame )
                             : _nextQuestion,
                         child: Text(
                           _currentIndex == _questions.length - 1
