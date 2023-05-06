@@ -7,7 +7,7 @@ import '../network/EventData.dart';
 import 'TwoPlayerInfo.dart';
 
 class FlameGamePage extends GamePage {
-  FlameGamePage({super.key, required bool training, required Color bannerColor, required FlameGameInstance gameInstance})
+  FlameGamePage({required super.key, required bool training, required Color bannerColor, required FlameGameInstance gameInstance})
       : super(bannerColor: bannerColor,
       training: training,
       background: "assets/ui/background_capyquiz.jpg",
@@ -22,7 +22,6 @@ class FlameGamePageState extends GamePageState {
 
   @override
   void initState() {
-    widget.gameInstance!.setParentWidget(this);
     super.initState();
   }
 
@@ -38,7 +37,6 @@ class FlameGamePageState extends GamePageState {
 
   @override
   void onStartGame(){
-    widget.gameInstance!.setParentWidget(this);
     widget.gameInstance!.onStartGame();
   }
 

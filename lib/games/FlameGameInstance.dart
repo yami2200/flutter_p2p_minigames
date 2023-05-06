@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flame/game.dart';
 import 'package:flutter_p2p_minigames/widgets/FlameGamePage.dart';
 
+import '../main.dart';
 import '../network/EventData.dart';
 
 abstract class FlameGameInstance extends FlameGame {
-  FlameGamePageState? parentWidget;
 
   void onMessageFromServer(EventData message);
 
@@ -12,7 +14,7 @@ abstract class FlameGameInstance extends FlameGame {
 
   void onStartGame();
 
-  void setParentWidget(FlameGamePageState parentWidget){
-    this.parentWidget = parentWidget;
+  FlameGamePageState? getParentWidget(){
+    return keyFlameGamePage.currentState;
   }
 }
