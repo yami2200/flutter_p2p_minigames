@@ -1,4 +1,4 @@
-import 'dart:math';
+import "dart:math";
 
 import '../network/Connection.dart';
 import 'GameInfo.dart';
@@ -41,7 +41,7 @@ class GameParty {
   void startGame(List<PlayerInfo> players) async{
     player = await Storage().getPlayerInfo();
     playerList = players.map((p) => PlayerInGame(p, 0)).toList();
-    opponent = playerList.firstWhere((p) => p.playerInfo.username != player!.username && p.playerInfo.avatar != player!.avatar).playerInfo;
+    opponent = playerList.firstWhere((p) => p.playerInfo.username != player!.username || p.playerInfo.avatar != player!.avatar).playerInfo;
     gameStarted = true;
     playedGames = {};
     gamesPlayed = 0;
