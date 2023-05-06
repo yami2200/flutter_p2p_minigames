@@ -12,6 +12,7 @@ import 'package:flutter_p2p_minigames/p2p_example.dart';
 import 'package:flutter_p2p_minigames/party_hub.dart';
 import 'package:flutter_p2p_minigames/room_page.dart';
 import 'package:flutter_p2p_minigames/training_page.dart';
+import 'package:flutter_p2p_minigames/widgets/FlameGamePage.dart';
 import 'package:go_router/go_router.dart';
 
 import 'games/safe_landing/game.dart';
@@ -21,6 +22,8 @@ import 'network/PeerToPeer.dart';
 void main() {
   runApp(MyApp());
 }
+
+final keyFlameGamePage = GlobalKey<FlameGamePageState>();
 
 class MyApp extends StatefulWidget {
   static final router = GoRouter(
@@ -73,7 +76,7 @@ class MyApp extends StatefulWidget {
           GoRoute(
               path: 'faceguess/:mode',
               builder: (context, state) =>
-                  FaceGuessPage(training: state.params['mode'] == 'training')),
+                  FaceGuessPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
         ],
       ),
     ],

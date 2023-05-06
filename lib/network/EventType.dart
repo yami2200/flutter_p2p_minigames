@@ -6,7 +6,9 @@ enum EventType {
   NEXT_GAME(text: "NEXT_GAME"),
   ADD_PLAYER_SCORE(text: "ADD_PLAYER_SCORE"),
   RECEIVED_SCORE(text: "RECEIVED_SCORE"),
-  END_GAME(text: "END_GAME");
+  END_GAME(text: "END_GAME"),
+  FACE_PART_GUESS(text: "FACE_PART_GUESS"),
+  FACE_ANSWER(text: "FACE_ANSWER");
 
   const EventType({required this.text});
 

@@ -32,6 +32,12 @@ class FaceWheelComp extends SpriteComponent with HasGameRef<FlameGame>{
     return indexAsset;
   }
 
+  void select(int index){
+    indexAsset = index;
+    changeFace();
+    running = false;
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
