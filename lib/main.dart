@@ -38,9 +38,9 @@ class MyApp extends StatefulWidget {
               builder: (context, state) =>
               const TrainingPage(key: Key('training page'))),
           GoRoute(
-              path: 'safe_landing',
+              path: 'safe_landing/:mode',
               builder: (context, state) =>
-                  SafeLandingsGameWidget()),
+                  SafeLandingsGameWidget(training: state.params['mode'] == 'training')),
           GoRoute(
               path: 'login',
               builder: (context, state) =>

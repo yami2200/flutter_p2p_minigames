@@ -1,41 +1,93 @@
-import 'package:flame/game.dart';
+import 'dart:convert';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/games/safe_landing/start_button.dart';
-import 'Countdown.dart';
+
+import '../../network/EventData.dart';
+import '../../network/EventType.dart';
+import '../../utils/GameParty.dart';
+import '../../widgets/FlameGamePage.dart';
+import '../../widgets/GamePage.dart';
+import '../FlameGameInstance.dart';
 import '../components/BackgroundComponent.dart';
+import 'Countdown.dart';
 import 'landing_platform.dart';
-import 'trapdoor.dart';
 import 'player.dart';
+import 'trapdoor.dart';
 
-class SafeLandingsGame extends FlameGame with HasCollisionDetection {
-
+class SafeLandingsGame extends FlameGameInstance
+    with HasCollisionDetection, HasGameRef<SafeLandingsGame> {
   late final Player player;
-  late final Countdown countdown;
+  late final Player playerOpponent;
 
   late final Trapdoor trapdoor;
-  late final LandingPlatform landingPlatform;
-  late final StartButton startButton;
+  late final Trapdoor trapdoorOpponent;
 
+  late final LandingPlatform landingPlatform;
+  late final LandingPlatform landingPlatformOpponent;
+
+  late final Countdown countdown;
+  late final Countdown countdownOpponent;
+
+  late final StartButton startButton;
+  bool isTraining;
+  String myAvatar = GameParty().player?.avatar ?? 'avatar0.png';
+  String? opponentAvatar = GameParty().opponent?.avatar;
+
+  late final yPosition = 200.0;
+
+  SafeLandingsGame(this.isTraining);
+
+  Function? onPlayerStartFall;
+
+  void makeOpponentFall() {
+    if (isTraining) return;
+    playerOpponent.startFall();
+  }
 
   @override
   Future<void> onLoad() async {
     add(BackgroundComponent("background.jpg"));
-    add(player = Player(onLand: () {
-      countdown.pause();
-      if (countdown.isFinished) {
-        // display win message
 
+    add(player = Player(
+        onLand: () {
+          countdown.pause();
+          if (countdown.isFinished) {
+            // display win message
+            this.parentWidget?.setCurrentPlayerScore(20);
+            if (isTraining) {
+              overlays.add("winTraining");
+            } else {
+              overlays.add("waitingOpponent");
+            }
+          } else {
+            // display lose message
+            this.parentWidget?.setCurrentPlayerScore(20);
+            if (isTraining) {
+              overlays.add("lostTraining");
+            } else {
+              overlays.add("waitingOpponent");
+            }
+          }
+        },
+        avatar: myAvatar));
 
-      } else {
-
-      }
-    }));
     add(trapdoor = Trapdoor());
+
     add(landingPlatform = LandingPlatform());
     add(ScreenHitbox());
 
-    add(countdown = Countdown());
+    add(countdown = Countdown(onCountdownFinish: () {
+      this.parentWidget?.setCurrentPlayerScore(0);
+      if (isTraining) {
+        overlays.add("lostTraining");
+      } else {
+        overlays.add("waitingOpponent");
+      }
+      remove(landingPlatform);
+    }));
+
     add(startButton = StartButton(
       text: 'Open',
       style: TextStyle(color: Colors.white, fontSize: 24.0),
@@ -44,24 +96,145 @@ class SafeLandingsGame extends FlameGame with HasCollisionDetection {
       onTap: () {
         trapdoor.destroy();
         player.startFall();
-        this.remove(startButton);
+        remove(startButton);
+        if (!isTraining) {
+          GameParty().sendToOpponent(jsonEncode(EventData(
+              EventType.SAFE_LANDING.text,
+              jsonEncode({
+                'message': 'START_FALL',
+              }))));
+        }
       },
     ));
+
+    player.position = Vector2(size.x / 2 / 2, yPosition);
+    trapdoor.position = Vector2(player.x, yPosition + player.size.y);
+    landingPlatform.position = Vector2(size.x / 2 / 2, size.y - 50);
+    countdown.position =
+        Vector2(landingPlatform.x + 50, landingPlatform.y + 25);
+
+    if (!isTraining) {
+      add(playerOpponent = Player(
+          onLand: () {
+            countdownOpponent.pause();
+            if (countdownOpponent.isFinished) {
+              // display win message
+            } else {}
+          },
+          avatar: opponentAvatar ?? 'avatar0.png'));
+
+      add(trapdoorOpponent = Trapdoor());
+
+      add(landingPlatformOpponent = LandingPlatform());
+
+      add(countdownOpponent = Countdown(onCountdownFinish: () {
+        // display lose message
+      }));
+
+      playerOpponent.position = Vector2(size.x / 2 + size.x / 2 / 2, yPosition);
+
+      trapdoorOpponent.position =
+          Vector2(playerOpponent.x, yPosition + playerOpponent.size.y);
+
+      landingPlatformOpponent.position =
+          Vector2(size.x / 2 + size.x / 2 / 2, size.y - 50);
+
+      countdownOpponent.position = Vector2(
+          landingPlatformOpponent.x + 50, landingPlatformOpponent.y + 25);
+    }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
   }
+
+  @override
+  void onMessageFromClient(EventData message) {
+    if (message.type == EventType.SAFE_LANDING.text) {
+      var data = message.data;
+      var dataToJson = jsonDecode(data);
+      var dataMessage = dataToJson['message'];
+      if (dataMessage == 'START_FALL') {
+        // opponent started falling
+        trapdoorOpponent.destroy();
+        playerOpponent.startFall();
+      }
+    }
+  }
+
+  @override
+  void onMessageFromServer(EventData message) {
+    if (message.type == EventType.SAFE_LANDING.text) {
+      var data = message.data;
+      var dataToJson = jsonDecode(data);
+      var dataMessage = dataToJson['message'];
+      if (dataMessage == 'START_FALL') {
+        // opponent started falling
+        trapdoorOpponent.destroy();
+        playerOpponent.startFall();
+      }
+    }
+  }
+
+  @override
+  void onStartGame() {
+    // TODO: implement onStartGame
+  }
 }
 
-// export game as a widget
+class SafeLandingsGameWidget extends FlameGamePage {
+  SafeLandingsGameWidget({super.key, required bool training})
+      : super(
+            bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
+            training: training,
+            gameInstance: SafeLandingsGame(training));
 
-class SafeLandingsGameWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return GameWidget(
-      game: SafeLandingsGame(),
-    );
+  GamePageState createState() => _SafeLandingsGameWidgetState();
+}
+
+class _SafeLandingsGameWidgetState extends FlameGamePageState {
+  @override
+  void onStartGame() {}
+
+  // ALL METHODS AVAILABLE IN THE GAME PAGE TEMPLATE ARE ALSO AVAIBLE IN FLAME GAME PAGE
+
+  @override
+  Map<String, Widget Function(BuildContext, dynamic)>? overlayWidgets() {
+    return {
+      'lostTraining': (context, data) => AlertDialog(
+            title: const Text('Game Over'),
+            content: const Text('You lost'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    quitTraining();
+                    widget.gameInstance?.overlays.remove('endGame');
+                  },
+
+                  child: const Text('OK'))
+            ],
+
+      ),
+      'winTraining': (context, data) => AlertDialog(
+        title: const Text('Bravo!'),
+        content: const Text('You won!'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                quitTraining();
+                widget.gameInstance?.overlays.remove('endGame');
+              },
+
+              child: const Text('OK'))
+        ],
+
+      ),
+      'waitingOpponent': (context, data) => const AlertDialog(
+        title: Text('Waiting for your opponent...'),
+        content: Text('You can do it!'),
+      ),
+    };
   }
 }
