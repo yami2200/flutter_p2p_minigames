@@ -9,20 +9,35 @@ class FaceWheelComp extends SpriteComponent with HasGameRef<FlameGame>{
   double currentMaxDelta = 0.1;
   int indexAsset = 0;
   final WheelStep step;
+  final Vector2 startPosition;
+  final Vector2 initSize;
   String faceID = "";
+  bool running = false;
 
-  FaceWheelComp(this.step) : super(size: Vector2(330, 330));
+  FaceWheelComp(this.step, this.startPosition, this.initSize) : super(size: Vector2(330, 330));
 
   @override
   Future<void> onLoad() async {
     sprite = step.getAsset(indexAsset);
-    size = Vector2(330, 330);
-    position = Vector2(gameRef.size.x / 2 - size.x / 2, 50);
+    size = initSize;
+    position = startPosition; //Vector2(gameRef.size.x / 2 - size.x / 2, 190)
+  }
+
+  void start(){
+    running = true;
+  }
+
+  int stop(){
+    running = false;
+    return indexAsset;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    if(!running){
+      return;
+    }
     deltaCounter += dt;
     if(deltaCounter > step.getDeltaSpeed()){
       deltaCounter = 0.0;

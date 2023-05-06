@@ -9,9 +9,9 @@ import '../../widgets/GamePage.dart';
 class FaceGuessPage extends FlameGamePage {
 
   FaceGuessPage({super.key, required bool training})
-      : super(bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
+      : super(bannerColor: const Color.fromRGBO(196, 114, 70, 0.8),
       training: training,
-      gameInstance: FaceGuessGameInstance());
+      gameInstance: FaceGuessGameInstance(training));
 
   @override
   GamePageState createState() => _FaceGuessPageState();
@@ -20,20 +20,7 @@ class FaceGuessPage extends FlameGamePage {
 class _FaceGuessPageState extends FlameGamePageState {
 
   @override
-  void onMessageFromServer(EventData message) {}
-
-  @override
-  void onMessageFromClient(EventData message) {}
-
-  @override
   void onStartGame(){
     setMainPlayerText("In progess...");
-  }
-
-  @override
-  Widget buildWidget(BuildContext context) {
-    return GameWidget(
-        game: FaceGuessGameInstance(),
-      );
   }
 }

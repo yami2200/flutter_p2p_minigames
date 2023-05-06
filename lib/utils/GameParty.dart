@@ -22,7 +22,8 @@ class GameParty {
   Connection? get connection => _connection;
 
   GameParty._internal() {
-    gameList.putIfAbsent("CapyQuiz", () => GameInfo("CapyQuiz", "Participate to a quiz about Capybaras. Be the first with the most good answers.", "/quiz/c"));
+    //gameList.putIfAbsent("CapyQuiz", () => GameInfo("CapyQuiz", "Participate to a quiz about Capybaras. Be the first with the most good answers.", "/quiz/c"));
+    gameList.putIfAbsent("FaceGuess", () => GameInfo("FaceGuess", "Remember the face on the screen. Try to recreate it before your opponent !", "/faceguess/c"));
   }
 
   factory GameParty() {
