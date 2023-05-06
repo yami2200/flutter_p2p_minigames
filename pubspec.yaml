@@ -69,15 +69,26 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
+    - assets/
     - assets/ui/
     - assets/avatars/
+    - assets/images/
     - assets/credits.txt
     - assets/images/faceguess/
     - assets/images/faceguess/face/
     - assets/images/faceguess/mouth/
     - assets/images/faceguess/eyes/
     - assets/images/faceguess/nose/
+    - assets/avatars/avatar0.png
+    - assets/avatars/avatar1.png
+    - assets/avatars/avatar2.png
+    - assets/avatars/avatar3.png
+    - assets/avatars/avatar4.png
+    - assets/avatars/avatar5.png
+    - assets/avatars/avatar6.png
+    - assets/avatars/avatar7.png
+    - assets/avatars/avatar8.png
+    - assets/avatars/avatar9.png
 
   fonts:
     - family: CoffeeCake

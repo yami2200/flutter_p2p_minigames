@@ -20,7 +20,7 @@ class _TrainingPage extends State<TrainingPage> {
     {"text": "Mael #2", "path": ""},
     {"text": "Mael #3", "path": ""},
     {"text": "Mael #4", "path": ""},
-    {"text": "safe_landing", "path": "/safe_landing"}
+    {"text": "safe_landing", "path": "/safe_landing/training"}
   ];
 
   @override

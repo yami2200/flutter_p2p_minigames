@@ -13,10 +13,15 @@ class Countdown extends PositionComponent with HasGameRef<SafeLandingsGame> {
   bool isPaused = false;
   get isFinished => _countdown <= 0.1;
 
+  final Function onCountdownFinish;
+
+  Countdown({required this.onCountdownFinish});
+
   @override
   Future<void> onLoad() async {
-      position = Vector2(gameRef.size.x / 2, gameRef.size.y - 50);
     }
+
+
 
   @override
   void update(double dt) {
@@ -29,6 +34,7 @@ class Countdown extends PositionComponent with HasGameRef<SafeLandingsGame> {
     _countdown -= dt;
     if (_countdown < 0) {
       _countdown = 0;
+      onCountdownFinish();
     }
   }
 
