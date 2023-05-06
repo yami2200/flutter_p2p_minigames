@@ -55,7 +55,7 @@ class SafeLandingsGame extends FlameGameInstance
           countdown.pause();
           if (countdown.isFinished) {
             // display win message
-            this.parentWidget?.setCurrentPlayerScore(20);
+            getParentWidget()?.setCurrentPlayerScore(20);
             if (isTraining) {
               overlays.add("winTraining");
             } else {
@@ -63,7 +63,7 @@ class SafeLandingsGame extends FlameGameInstance
             }
           } else {
             // display lose message
-            this.parentWidget?.setCurrentPlayerScore(20);
+            getParentWidget()?.setCurrentPlayerScore(20);
             if (isTraining) {
               overlays.add("lostTraining");
             } else {
@@ -79,7 +79,7 @@ class SafeLandingsGame extends FlameGameInstance
     add(ScreenHitbox());
 
     add(countdown = Countdown(onCountdownFinish: () {
-      this.parentWidget?.setCurrentPlayerScore(0);
+      getParentWidget()?.setCurrentPlayerScore(0);
       if (isTraining) {
         overlays.add("lostTraining");
       } else {
@@ -184,7 +184,7 @@ class SafeLandingsGame extends FlameGameInstance
 }
 
 class SafeLandingsGameWidget extends FlameGamePage {
-  SafeLandingsGameWidget({super.key, required bool training})
+  SafeLandingsGameWidget({required super.key, required bool training})
       : super(
             bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
             training: training,

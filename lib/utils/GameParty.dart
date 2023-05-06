@@ -16,7 +16,7 @@ class GameParty {
   PlayerInfo? opponent;
   final int maxGames = 5;
   bool gameStarted = false;
-  final int timeBetweenGames = Config.devMode ? 1 : 20;
+  final int timeBetweenGames = Config.devMode ? 3 : 20;
   Map<String, GameInfo> gameList = {};
   Set<String> playedGames = {};
   int gamesPlayed = 0;
@@ -25,7 +25,7 @@ class GameParty {
 
   GameParty._internal() {
     gameList.putIfAbsent("CapyQuiz", () => GameInfo("CapyQuiz", "Participate to a quiz about Capybaras. Be the first with the most good answers.", "/quiz/c"));
-    // gameList.putIfAbsent("FaceGuess", () => GameInfo("FaceGuess", "Remember the face on the screen. Try to recreate it before your opponent !", "/faceguess/c"));
+    gameList.putIfAbsent("FaceGuess", () => GameInfo("FaceGuess", "Remember the face on the screen. Try to recreate it before your opponent !", "/faceguess/c"));
     gameList.putIfAbsent("Safe Landing", () => GameInfo("Safe Landing", "Try to land when the counter hit 0 seconds.", "/safe_landing/c"));
     loadPlayer();
   }
