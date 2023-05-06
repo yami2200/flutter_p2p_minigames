@@ -73,6 +73,8 @@ flutter:
     - assets/ui/
     - assets/avatars/
     - assets/credits.txt
+    - assets/images/faceguess/face/
+    - assets/images/faceguess/eyes/
 
   fonts:
     - family: CoffeeCake

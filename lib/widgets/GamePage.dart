@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,8 +16,9 @@ class GamePage extends StatefulWidget {
   final Color bannerColor;
   final bool training;
   final String background;
+  final FlameGame? gameInstance;
 
-  const GamePage({super.key, required this.bannerColor, required this.training, required this.background});
+  GamePage({super.key, required this.bannerColor, required this.training, required this.background, this.gameInstance});
 
   @override
   GamePageState createState() => GamePageState();

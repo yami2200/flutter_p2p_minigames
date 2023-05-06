@@ -1,4 +1,3 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/GamePage.dart';
@@ -8,7 +7,7 @@ import '../network/EventData.dart';
 class GamePageTemplate extends GamePage {
 
   // Edit the constructor here (bannerColor and background)
-  const GamePageTemplate({super.key, required bool training})
+  GamePageTemplate({super.key, required bool training})
       : super(bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
       training: training,
       background: "assets/ui/background_capyquiz.jpg");

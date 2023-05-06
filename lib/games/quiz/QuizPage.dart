@@ -7,7 +7,7 @@ import '../../widgets/GamePage.dart';
 
 class QuizPage extends GamePage {
 
-  const QuizPage({Key? key, required bool training})
+  QuizPage({Key? key, required bool training})
       : super(bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
       training: training,
       background: "assets/ui/background_capyquiz.jpg");
