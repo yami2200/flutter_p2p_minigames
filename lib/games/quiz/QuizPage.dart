@@ -140,9 +140,11 @@ class _QuizPageState extends GamePageState {
   }
 
   @override
-  List<StatelessWidget> buildWidget(BuildContext context) {
+  Widget buildWidget(BuildContext context) {
     final currentQuestion = _questions[_currentIndex];
-    return [
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           const Spacer(),
           Card(
             color: const Color.fromRGBO(117, 197, 164, 0.6),
@@ -229,6 +231,7 @@ class _QuizPageState extends GamePageState {
             ),
           ),
           const Spacer(),
-        ];
+        ]
+    );
   }
 }

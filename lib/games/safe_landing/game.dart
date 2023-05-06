@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/games/safe_landing/start_button.dart';
 import 'Countdown.dart';
-import 'background_image.dart';
+import '../components/BackgroundComponent.dart';
 import 'landing_platform.dart';
 import 'trapdoor.dart';
 import 'player.dart';
@@ -20,7 +20,7 @@ class SafeLandingsGame extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    add(BackgroundComponent());
+    add(BackgroundComponent("background.jpg"));
     add(player = Player(onLand: () {
       countdown.pause();
       if (countdown.isFinished) {
@@ -47,7 +47,6 @@ class SafeLandingsGame extends FlameGame with HasCollisionDetection {
         this.remove(startButton);
       },
     ));
-
   }
 
   @override

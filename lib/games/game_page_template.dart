@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/GamePage.dart';
@@ -49,7 +50,6 @@ class _GamePageTemplateState extends GamePageState {
 
   @override
   void onStartGame(){
-    this.opponentPlayerText = "";
     // triggered when the game starts for both players (triggered once we are sure both player are on the game page)
   }
 
@@ -95,24 +95,8 @@ class _GamePageTemplateState extends GamePageState {
 
   // Override buildWidget to add widgets to the page
   @override
-  List<StatelessWidget> buildWidget(BuildContext context) {
-    return [
-      // Add your widgets here
-      // Example:
-      /*const Spacer(),
-      Card(
-        color: const Color.fromRGBO(117, 197, 164, 0.6),
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Training mode: ${widget.training}"),
-            ],
-          ),
-        ),
-      ),
-      const Spacer(),*/
-    ];
+  Widget buildWidget(BuildContext context) {
+    return const Text("Template");
+    //return GameWidget(game: GameInstance());
   }
 }

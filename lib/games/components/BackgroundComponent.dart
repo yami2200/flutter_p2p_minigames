@@ -1,15 +1,15 @@
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
-import 'game.dart';
+class BackgroundComponent extends SpriteComponent with HasGameRef<FlameGame> {
+  final String backgroundImage;
 
-class BackgroundComponent extends SpriteComponent with HasGameRef<SafeLandingsGame> {
-
-  BackgroundComponent() : super(size: Vector2.zero());
+  BackgroundComponent(this.backgroundImage) : super(size: Vector2.zero());
 
   @override
   Future<void> onLoad() async {
-    sprite = await Sprite.load('background.jpg');
+    sprite = await Sprite.load(backgroundImage);
     fitSize(gameRef.size);
     position = Vector2.zero();
     centerImage();

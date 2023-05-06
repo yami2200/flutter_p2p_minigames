@@ -153,17 +153,6 @@ class GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = List<Widget>.from(buildWidget(context));
-    widgets.insert(0, Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TwoPlayerInfo(
-        player2: widget.training ? null : opponentPlayer,
-        player1Text: mainPlayerText,
-        player2Text: widget.training ? null : opponentPlayerText,
-        cardColor: widget.bannerColor,
-      ),
-    ));
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -172,15 +161,26 @@ class GamePageState extends State<GamePage> {
             fit: BoxFit.cover,
         ),
       ),
-      child:Column(
+      child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: widgets,
+          children: [
+            Padding(
+            padding: const EdgeInsets.all(8.0),
+              child: TwoPlayerInfo(
+                player2: widget.training ? null : opponentPlayer,
+                player1Text: mainPlayerText,
+                player2Text: widget.training ? null : opponentPlayerText,
+                cardColor: widget.bannerColor,
+              ),
+            ),
+            Expanded(child: buildWidget(context)),
+          ],
         ),
       ),
     );
   }
 
-  List<StatelessWidget> buildWidget(BuildContext context) {
-    return [const Text("Override this method")];
+  Widget buildWidget(BuildContext context) {
+    return const Text("Override this method");
   }
 }
