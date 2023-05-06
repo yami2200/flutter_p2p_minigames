@@ -5,9 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_p2p_minigames/games/components/ButtonComponent.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/FaceWheelComp.dart';
 
+import '../../network/EventData.dart';
+import '../FlameGameInstance.dart';
 import '../components/BackgroundComponent.dart';
 
-class FaceGuessGameInstance extends FlameGame{
+class FaceGuessGameInstance extends FlameGameInstance{
   final bool training;
   FaceWheelComp? currentWheel;
   FaceWheelComp? opponentWheel;
@@ -24,15 +26,15 @@ class FaceGuessGameInstance extends FlameGame{
   Future<void> onLoad() async {
     await add(BackgroundComponent("faceguess/background_faceguess.jpg"));
 
-    /*steps.add(await WheelStep.create(0.5, "faceguess/face/Face", 6));
+    steps.add(await WheelStep.create(0.5, "faceguess/face/Face", 6));
     steps.add(await WheelStep.create(0.4, "faceguess/eyes/Eyes", 4));
     steps.add(await WheelStep.create(0.3, "faceguess/mouth/Mouth", 5));
-    steps.add(await WheelStep.create(0.2, "faceguess/nose/Nose", 5));*/
+    steps.add(await WheelStep.create(0.2, "faceguess/nose/Nose", 5));
 
-    /*loadStep(true);
-    loadStep(false);*/
+    loadStep(true);
+    loadStep(false);
 
-    //currentWheel!.start();
+    currentWheel!.start();
     add(ButtonComponent(
         text: "Select",
         style: const TextStyle(fontFamily: "SuperBubble", fontSize: 25, color: Color.fromRGBO(255, 255, 255, 1.0)),
@@ -49,6 +51,16 @@ class FaceGuessGameInstance extends FlameGame{
         startPosition: Vector2(size.x / 4 * 3 - 75, 375),
       ));
     }
+  }
+
+  @override
+  void onMessageFromServer(EventData message){
+    log("messageeeeeeeeeeeeeee from server");
+  }
+
+  @override
+  void onMessageFromClient(EventData message){
+    log("messageeeeeeeeeeeeeee from client");
   }
 
   @override
@@ -80,6 +92,11 @@ class FaceGuessGameInstance extends FlameGame{
     currentWheel!.stop();
     stepIndex++;
     loadStep(true);
+  }
+
+  @override
+  void onStartGame() {
+    log("sttttttttttaaaaaaaaaaaaaaaaaaarrrt");
   }
 
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../network/EventData.dart';
 import '../../widgets/FlameGamePage.dart';
 import '../../widgets/GamePage.dart';
+import 'FlameGameInstance.dart';
 
 class GAMENAMEPage extends FlameGamePage {
 
@@ -35,4 +36,19 @@ class _GAMENAMEPageState extends FlameGamePageState {
   }
 }
 
-class GAMENAMEInstance extends FlameGame{}
+class GAMENAMEInstance extends FlameGameInstance{
+  @override
+  void onMessageFromClient(EventData message) {
+    // TODO: implement onMessageFromClient
+  }
+
+  @override
+  void onMessageFromServer(EventData message) {
+    // TODO: implement onMessageFromServer
+  }
+
+  @override
+  void onStartGame() {
+    // TODO: implement onStartGame
+  }
+}

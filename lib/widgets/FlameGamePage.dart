@@ -2,10 +2,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/GamePage.dart';
+import '../games/FlameGameInstance.dart';
+import '../network/EventData.dart';
 import 'TwoPlayerInfo.dart';
 
 class FlameGamePage extends GamePage {
-  FlameGamePage({super.key, required bool training, required Color bannerColor, required FlameGame gameInstance})
+  FlameGamePage({super.key, required bool training, required Color bannerColor, required FlameGameInstance gameInstance})
       : super(bannerColor: bannerColor,
       training: training,
       background: "assets/ui/background_capyquiz.jpg",
@@ -17,6 +19,27 @@ class FlameGamePage extends GamePage {
 
 // Edit the state class name here (it should always extends GamePageState)
 class FlameGamePageState extends GamePageState {
+
+  @override
+  void initState() {
+    widget.gameInstance!.setParentWidget(this);
+    super.initState();
+  }
+
+  @override
+  void onMessageFromServer(EventData message) {
+    widget.gameInstance!.onMessageFromServer(message);
+  }
+
+  @override
+  void onMessageFromClient(EventData message) {
+    widget.gameInstance!.onMessageFromClient(message);
+  }
+
+  @override
+  void onStartGame(){
+    widget.gameInstance!.onStartGame();
+  }
 
   @override
   Widget build(BuildContext context) {

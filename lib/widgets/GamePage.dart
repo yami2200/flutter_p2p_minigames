@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../games/FlameGameInstance.dart';
 import '../main.dart';
 import '../network/EventData.dart';
 import '../network/EventType.dart';
@@ -16,7 +17,7 @@ class GamePage extends StatefulWidget {
   final Color bannerColor;
   final bool training;
   final String background;
-  final FlameGame? gameInstance;
+  final FlameGameInstance? gameInstance;
 
   GamePage({super.key, required this.bannerColor, required this.training, required this.background, this.gameInstance});
 
