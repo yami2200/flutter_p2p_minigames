@@ -56,9 +56,19 @@ class SafeLandingsGame extends FlameGameInstance
           if (countdown.isFinished) {
             // display win message
             this.parentWidget?.setCurrentPlayerScore(20);
+            if (isTraining) {
+              overlays.add("winTraining");
+            } else {
+              overlays.add("waitingOpponent");
+            }
           } else {
             // display lose message
             this.parentWidget?.setCurrentPlayerScore(20);
+            if (isTraining) {
+              overlays.add("lostTraining");
+            } else {
+              overlays.add("waitingOpponent");
+            }
           }
         },
         avatar: myAvatar));
@@ -70,6 +80,12 @@ class SafeLandingsGame extends FlameGameInstance
 
     add(countdown = Countdown(onCountdownFinish: () {
       this.parentWidget?.setCurrentPlayerScore(0);
+      if (isTraining) {
+        overlays.add("lostTraining");
+      } else {
+        overlays.add("waitingOpponent");
+      }
+      remove(landingPlatform);
     }));
 
     add(startButton = StartButton(
@@ -186,6 +202,39 @@ class _SafeLandingsGameWidgetState extends FlameGamePageState {
 
   @override
   Map<String, Widget Function(BuildContext, dynamic)>? overlayWidgets() {
-    return null;
+    return {
+      'lostTraining': (context, data) => AlertDialog(
+            title: const Text('Game Over'),
+            content: const Text('You lost'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    quitTraining();
+                    widget.gameInstance?.overlays.remove('endGame');
+                  },
+
+                  child: const Text('OK'))
+            ],
+
+      ),
+      'winTraining': (context, data) => AlertDialog(
+        title: const Text('Bravo!'),
+        content: const Text('You won!'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                quitTraining();
+                widget.gameInstance?.overlays.remove('endGame');
+              },
+
+              child: const Text('OK'))
+        ],
+
+      ),
+      'waitingOpponent': (context, data) => const AlertDialog(
+        title: Text('Waiting for your opponent...'),
+        content: Text('You can do it!'),
+      ),
+    };
   }
 }
