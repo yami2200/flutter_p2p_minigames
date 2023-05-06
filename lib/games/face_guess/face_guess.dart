@@ -1,8 +1,6 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess_game_instance.dart';
 
-import '../../network/EventData.dart';
 import '../../widgets/FlameGamePage.dart';
 import '../../widgets/GamePage.dart';
 
@@ -14,13 +12,5 @@ class FaceGuessPage extends FlameGamePage {
       gameInstance: FaceGuessGameInstance(training));
 
   @override
-  GamePageState createState() => _FaceGuessPageState();
-}
-
-class _FaceGuessPageState extends FlameGamePageState {
-
-  @override
-  void onStartGame(){
-    setMainPlayerText("In progess...");
-  }
+  GamePageState createState() => FlameGamePageState();
 }

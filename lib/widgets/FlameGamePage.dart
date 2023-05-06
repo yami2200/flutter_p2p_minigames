@@ -38,6 +38,7 @@ class FlameGamePageState extends GamePageState {
 
   @override
   void onStartGame(){
+    widget.gameInstance!.setParentWidget(this);
     widget.gameInstance!.onStartGame();
   }
 
