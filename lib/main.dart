@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess.dart';
+import 'package:flutter_p2p_minigames/games/fruits_slash/game.dart';
 import 'package:flutter_p2p_minigames/games/quiz/QuizPage.dart';
 import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
@@ -38,6 +39,10 @@ class MyApp extends StatefulWidget {
               path: 'safe_landing/:mode',
               builder: (context, state) =>
                   SafeLandingsGameWidget(training: state.params['mode'] == 'training')),
+          GoRoute(
+              path: 'fruits_slash/:mode',
+              builder: (context, state) =>
+                  FruitsSlashPage(training: state.params['mode'] == 'training')),
           GoRoute(
               path: 'login',
               builder: (context, state) =>

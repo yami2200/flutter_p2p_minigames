@@ -210,7 +210,7 @@ class _SafeLandingsGameWidgetState extends FlameGamePageState {
               TextButton(
                   onPressed: () {
                     quitTraining();
-                    widget.gameInstance?.overlays.remove('endGame');
+                    widget.gameInstance?.overlays.remove('lostTraining');
                   },
 
                   child: const Text('OK'))
@@ -224,7 +224,7 @@ class _SafeLandingsGameWidgetState extends FlameGamePageState {
           TextButton(
               onPressed: () {
                 quitTraining();
-                widget.gameInstance?.overlays.remove('endGame');
+                widget.gameInstance?.overlays.remove('winTraining');
               },
 
               child: const Text('OK'))
