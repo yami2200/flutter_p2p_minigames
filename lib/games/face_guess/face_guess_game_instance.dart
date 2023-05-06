@@ -17,6 +17,7 @@ class FaceGuessGameInstance extends FlameGameInstance{
   int stepIndex = 0;
   int opponentStepIndex = 0;
   int s = 0;
+  bool end = false;
 
   FaceGuessGameInstance(this.training) {
     s = training ? 330 : 180;
@@ -89,14 +90,21 @@ class FaceGuessGameInstance extends FlameGameInstance{
   }
 
   void hitSelect(){
-    currentWheel!.stop();
+    if(end) return;
+    if(currentWheel != null && currentWheel!.running) currentWheel!.stop();
+    if(stepIndex >= steps.length - 1){
+      end = true;
+      parentWidget!.setMainPlayerText("Finished!");
+      return;
+    }
     stepIndex++;
+    parentWidget!.setMainPlayerText("Step ${stepIndex + 1}");
     loadStep(true);
   }
 
   @override
   void onStartGame() {
-    log("sttttttttttaaaaaaaaaaaaaaaaaaarrrt");
+    parentWidget!.setMainPlayerText("Step ${stepIndex + 1}");
   }
 
 }
