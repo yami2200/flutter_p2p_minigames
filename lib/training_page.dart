@@ -13,7 +13,6 @@ class _TrainingPage extends State<TrainingPage> {
   final List<Map<String, String>> buttons = [
     {"text": "Face Guess", "path": "/faceguess/training"},
     {"text": "Speed run", "path": ""},
-    {"text": "Jungle Jump", "path": ""},
     {"text": "Capy-Quiz", "path": "/quiz/training"},
     {"text": "Choose the good side", "path": "/choosegoodside/training"},
     {"text": "Mael #1", "path": ""},
