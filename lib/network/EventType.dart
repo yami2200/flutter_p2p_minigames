@@ -13,7 +13,8 @@ enum EventType {
   FACE_ANSWER(text: "FACE_ANSWER"),
   SWAP_SIDE(text: "SWAP_SIDE"),
   SIDE_PIKE(text: "SIDE_PIKE"),
-  PIKE_DEAD(text: "PIKE_DEAD");
+  PIKE_DEAD(text: "PIKE_DEAD"),
+  TILT_MAZE_END(text: "TILT_MAZE_END");
 
   const EventType({required this.text});
 

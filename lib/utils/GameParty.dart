@@ -29,6 +29,7 @@ class GameParty {
     gameList.putIfAbsent("Safe Landing", () => GameInfo("Safe Landing", "Try to land when the counter hit 0 seconds.", "/safe_landing/c"));
     gameList.putIfAbsent("Fruits Slash", () => GameInfo("Fruits Slash", "Slash these fruits!", "/fruits_slash/c"));
     gameList.putIfAbsent("Choose the good side", () => GameInfo("Choose the good side", "Choose one side of the platform. Pray to not die before your opponent!", "/choosegoodside/c"));
+    gameList.putIfAbsent("Eat That Cheese", () => GameInfo("Eat That Cheese", "Eat all that cheese.", "/eat_that_cheese/c"));
     loadPlayer();
   }
 

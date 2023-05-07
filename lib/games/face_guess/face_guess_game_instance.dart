@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:html';
 import 'dart:math';
 
 import 'package:flame/game.dart';
