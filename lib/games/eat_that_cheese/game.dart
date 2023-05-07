@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_p2p_minigames/games/tilt_maze/cheese.dart';
+import 'package:flutter_p2p_minigames/games/eat_that_cheese/cheese.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import '../../network/EventData.dart';
 import '../../network/EventType.dart';
@@ -16,20 +16,20 @@ import 'rat.dart';
 
 
 
-const int maxCheese = 1;
+const int maxCheese = 5;
 
-class TiltMazePage extends FlameGamePage {
+class EatThatCheesePage extends FlameGamePage {
 
-  TiltMazePage({super.key, required bool training})
+  EatThatCheesePage({super.key, required bool training})
       : super(bannerColor: const Color.fromRGBO(154, 216, 224, 0.8),
       training: training,
-      gameInstance: TiltMazeInstance(training: training));
+      gameInstance: EatThatCheeseInstance(training: training));
 
   @override
-  GamePageState createState() => _TiltMazePageState();
+  GamePageState createState() => _EatThatCheesePageState();
 }
 
-class _TiltMazePageState extends FlameGamePageState {
+class _EatThatCheesePageState extends FlameGamePageState {
 
   // ALL METHODS AVAILABLE IN THE GAME PAGE TEMPLATE ARE ALSO AVAIBLE IN FLAME GAME PAGE
 
@@ -58,11 +58,11 @@ class _TiltMazePageState extends FlameGamePageState {
   }
 }
 
-class TiltMazeInstance extends FlameGameInstance with HasCollisionDetection {
+class EatThatCheeseInstance extends FlameGameInstance with HasCollisionDetection {
   final bool training;
 
 
-  TiltMazeInstance({required this.training});
+  EatThatCheeseInstance({required this.training});
   late final Rat _rat;
   late Vector2 _acceleration;
   

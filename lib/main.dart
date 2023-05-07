@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
 import 'package:flutter_p2p_minigames/games/choose_good_side/choose_good_side.dart';
+import 'package:flutter_p2p_minigames/games/eat_that_cheese/game.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess.dart';
 import 'package:flutter_p2p_minigames/games/fruits_slash/game.dart';
 import 'package:flutter_p2p_minigames/games/quiz/QuizPage.dart';
-import 'package:flutter_p2p_minigames/games/tilt_maze/game.dart';
 import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
@@ -49,9 +49,9 @@ class MyApp extends StatefulWidget {
               builder: (context, state) =>
                   FruitsSlashPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
           GoRoute(
-              path: 'tilt_maze/:mode',
+              path: 'eat_that_cheese/:mode',
               builder: (context, state) =>
-                  TiltMazePage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
+                  EatThatCheesePage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
           GoRoute(
               path: 'login',
               builder: (context, state) =>

@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'game.dart';
 
 class Cheese extends SpriteComponent
-    with HasGameRef<TiltMazeInstance>, CollisionCallbacks {
+    with HasGameRef<EatThatCheeseInstance>, CollisionCallbacks {
   @override
   final images = Images(prefix: 'assets/images/tilt_maze/');
 

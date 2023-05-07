@@ -15,7 +15,7 @@ class _TrainingPage extends State<TrainingPage> {
     {"text": "Speed run", "path": ""},
     {"text": "Capy-Quiz", "path": "/quiz/training"},
     {"text": "Choose the good side", "path": "/choosegoodside/training"},
-    {"text": "Tilt Maze", "path": "/tilt_maze/training"},
+    {"text": "Eat That Cheese", "path": "/eat_that_cheese/training"},
     {"text": "Fruits Slash", "path": "/fruits_slash/training"},
     {"text": "Safe Landing", "path": "/safe_landing/training"},
   ];
