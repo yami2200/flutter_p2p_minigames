@@ -10,7 +10,8 @@ enum EventType {
   SAFE_LANDING(text: "SAFE_LANDING"),
   FRUITS_SLASH_END(text: "FRUITS_SLASH_END"),
   FACE_PART_GUESS(text: "FACE_PART_GUESS"),
-  FACE_ANSWER(text: "FACE_ANSWER");
+  FACE_ANSWER(text: "FACE_ANSWER"),
+  TILT_MAZE_END(text: "TILT_MAZE_END");
 
   const EventType({required this.text});
 
