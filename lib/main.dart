@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
+import 'package:flutter_p2p_minigames/games/choose_good_side/choose_good_side.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess.dart';
 import 'package:flutter_p2p_minigames/games/fruits_slash/game.dart';
 import 'package:flutter_p2p_minigames/games/quiz/QuizPage.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatefulWidget {
           GoRoute(
               path: 'fruits_slash/:mode',
               builder: (context, state) =>
-                  FruitsSlashPage(training: state.params['mode'] == 'training')),
+                  FruitsSlashPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
           GoRoute(
               path: 'login',
               builder: (context, state) =>
@@ -82,6 +83,10 @@ class MyApp extends StatefulWidget {
               path: 'faceguess/:mode',
               builder: (context, state) =>
                   FaceGuessPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
+          GoRoute(
+              path: 'choosegoodside/:mode',
+              builder: (context, state) =>
+                  ChooseGoodSidePage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
         ],
       ),
     ],
