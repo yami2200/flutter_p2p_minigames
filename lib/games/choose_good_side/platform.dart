@@ -6,6 +6,7 @@ class Platform extends SpriteComponent {
   Vector2 initSize;
   Sprite? spritePike;
   Sprite? spriteEmpty;
+  bool piky = false;
 
 
   Platform(this.startPosition, this.initSize) : super(size: Vector2(970, 700));
@@ -22,14 +23,28 @@ class Platform extends SpriteComponent {
   void setPike(bool pike){
     if(pike) sprite = spritePike;
     else sprite = spriteEmpty;
+    piky = pike;
   }
 
   void hide(){
-    sprite = null;
+    position.y = 2500;
+  }
+
+  bool isPiky(){
+    return piky;
   }
 
   void show(){
     sprite = spriteEmpty;
+  }
+
+  bool goUp(length){
+    position.y -= length;
+    if(position.y < startPosition.y) {
+      position.y = startPosition.y;
+      return true;
+    }
+    return false;
   }
 
 }

@@ -24,6 +24,7 @@ class TextComponent extends PositionComponent{
     textPainter.layout();
     size = Vector2(textPainter.width, textPainter.height);
     position = startPosition;
+    anchor = Anchor.center;
   }
 
   @override

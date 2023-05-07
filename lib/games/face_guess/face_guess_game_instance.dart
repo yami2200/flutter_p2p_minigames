@@ -67,9 +67,9 @@ class FaceGuessGameInstance extends FlameGameInstance{
       await add(comp);
       comp.select(indexes[i]);
     }
-    rememberText = TextComponent(text: "Remember!",startPosition: Vector2(size.x / 2 - 100, 550), style: const TextStyle(fontFamily: "SuperBubble", fontSize: 30, color: Color.fromRGBO(0, 0, 0, 1.0)));
+    rememberText = TextComponent(text: "Remember!",startPosition: Vector2(size.x / 2, 550), style: const TextStyle(fontFamily: "SuperBubble", fontSize: 30, color: Color.fromRGBO(0, 0, 0, 1.0)));
     await add(rememberText!);
-    countdownText = TextComponent(text: "5",startPosition: Vector2(size.x / 2 - 10, 600), style: const TextStyle(fontFamily: "SuperBubble", fontSize: 30, color: Color.fromRGBO(0, 0, 0, 1.0)));
+    countdownText = TextComponent(text: "5",startPosition: Vector2(size.x / 2, 600), style: const TextStyle(fontFamily: "SuperBubble", fontSize: 30, color: Color.fromRGBO(0, 0, 0, 1.0)));
     await add(countdownText!);
     waitTime = 8.0;
   }
@@ -201,7 +201,7 @@ class FaceGuessGameInstance extends FlameGameInstance{
       ));
     }
     int score = getScore();
-    add(TextComponent(text: "Your score : $score", style: const TextStyle(fontSize: 30, fontFamily: "SuperBubble", color: Color.fromRGBO(0, 0, 0, 1.0)), startPosition: Vector2(size.x / 2 - 135, 625)));
+    add(TextComponent(text: "Your score : $score", style: const TextStyle(fontSize: 30, fontFamily: "SuperBubble", color: Color.fromRGBO(0, 0, 0, 1.0)), startPosition: Vector2(size.x / 2, 625)));
     return score;
   }
 
