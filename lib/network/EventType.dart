@@ -8,9 +8,9 @@ enum EventType {
   RECEIVED_SCORE(text: "RECEIVED_SCORE"),
   END_GAME(text: "END_GAME"),
   SAFE_LANDING(text: "SAFE_LANDING"),
-  FRUITS_SLASH_END(text: "FRUITS_SLASH_END");
+  FRUITS_SLASH_END(text: "FRUITS_SLASH_END"),
   FACE_PART_GUESS(text: "FACE_PART_GUESS"),
-  FACE_ANSWER(text: "FACE_ANSWER"),
+  FACE_ANSWER(text: "FACE_ANSWER");
 
   const EventType({required this.text});
 

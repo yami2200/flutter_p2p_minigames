@@ -154,13 +154,13 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
         if (_isCollision(fruit, _slash)) {
           fruit.slice();
           slicedFruits = min(slicedFruits + 1, maxSlicedFruits);
-          parentWidget?.setMainPlayerText("You sliced $slicedFruits fruit!");
+          getParentWidget()?.setMainPlayerText("You sliced $slicedFruits fruit!");
           if (slicedFruits >= maxSlicedFruits) {
             if (training) {
               overlays.add("winTraining");
             } else {
               GameParty().sendToOpponent(jsonEncode(EventData(EventType.FRUITS_SLASH_END.text, jsonEncode({}))));
-              parentWidget?.setCurrentPlayerScore(slicedFruits);
+              getParentWidget()?.setCurrentPlayerScore(slicedFruits);
               overlays.add("waitingOpponent");
             }
           }
@@ -187,7 +187,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   @override
   void onMessageFromClient(EventData message) {
     if (message.type == EventType.FRUITS_SLASH_END.text) {
-      parentWidget?.setCurrentPlayerScore(slicedFruits);
+      getParentWidget()?.setCurrentPlayerScore(slicedFruits);
       overlays.add("waitingOpponent");
     }
   }
@@ -195,7 +195,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   @override
   void onMessageFromServer(EventData message) {
     if (message.type == EventType.FRUITS_SLASH_END.text) {
-      parentWidget?.setCurrentPlayerScore(slicedFruits);
+      getParentWidget()?.setCurrentPlayerScore(slicedFruits);
       overlays.add("waitingOpponent");
     }
   }
