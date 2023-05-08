@@ -92,6 +92,7 @@ flutter:
     - assets/images/fruits_slash/
     - assets/images/choosegoodside/
     - assets/images/tilt_maze/
+    - assets/images/train/
 
   fonts:
     - family: CoffeeCake

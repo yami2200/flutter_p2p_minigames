@@ -8,6 +8,7 @@ import 'package:flutter_p2p_minigames/games/eat_that_cheese/game.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess.dart';
 import 'package:flutter_p2p_minigames/games/fruits_slash/game.dart';
 import 'package:flutter_p2p_minigames/games/quiz/QuizPage.dart';
+import 'package:flutter_p2p_minigames/games/train_tally/train_tally.dart';
 import 'package:flutter_p2p_minigames/join_room_page.dart';
 import 'package:flutter_p2p_minigames/credit_page.dart';
 import 'package:flutter_p2p_minigames/login_page.dart';
@@ -92,6 +93,10 @@ class MyApp extends StatefulWidget {
               path: 'choosegoodside/:mode',
               builder: (context, state) =>
                   ChooseGoodSidePage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
+          GoRoute(
+              path: 'traintally/:mode',
+              builder: (context, state) =>
+                  TrainTallyPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
         ],
       ),
     ],

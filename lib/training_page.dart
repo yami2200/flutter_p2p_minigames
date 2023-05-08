@@ -12,7 +12,7 @@ class TrainingPage extends StatefulWidget {
 class _TrainingPage extends State<TrainingPage> {
   final List<Map<String, String>> buttons = [
     {"text": "Face Guess", "path": "/faceguess/training"},
-    {"text": "Speed run", "path": ""},
+    {"text": "Train Tally", "path": "/traintally/training"},
     {"text": "Capy-Quiz", "path": "/quiz/training"},
     {"text": "Choose the good side", "path": "/choosegoodside/training"},
     {"text": "Eat That Cheese", "path": "/eat_that_cheese/training"},
