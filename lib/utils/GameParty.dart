@@ -31,6 +31,8 @@ class GameParty {
     gameList.putIfAbsent("Choose the good side", () => GameInfo("Choose the good side", "Choose one side of the platform. Pray to not die before your opponent!", "/choosegoodside/c"));
     gameList.putIfAbsent("Eat That Cheese", () => GameInfo("Eat That Cheese", "Eat all that cheese.", "/eat_that_cheese/c"));
     gameList.putIfAbsent("Train Tally", () => GameInfo("Train Tally", "Count the passengers of the train passing by!", "/traintally/c"));
+    gameList.putIfAbsent("Arrow Swiping", () => GameInfo("Arrow Swiping", "Swipe in the direction of the arrow!", "/arrow_swiping/c"));
+
     loadPlayer();
   }
 

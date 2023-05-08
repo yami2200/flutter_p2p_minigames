@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_p2p_minigames/create_room_page.dart';
+import 'package:flutter_p2p_minigames/games/arrow_swiping/game.dart';
 import 'package:flutter_p2p_minigames/games/choose_good_side/choose_good_side.dart';
 import 'package:flutter_p2p_minigames/games/eat_that_cheese/game.dart';
 import 'package:flutter_p2p_minigames/games/face_guess/face_guess.dart';
@@ -49,6 +50,10 @@ class MyApp extends StatefulWidget {
               path: 'fruits_slash/:mode',
               builder: (context, state) =>
                   FruitsSlashPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
+          GoRoute(
+              path: 'arrow_swiping/:mode',
+              builder: (context, state) =>
+                  ArrowSwipingPage(key: keyFlameGamePage, training: state.params['mode'] == 'training')),
           GoRoute(
               path: 'eat_that_cheese/:mode',
               builder: (context, state) =>

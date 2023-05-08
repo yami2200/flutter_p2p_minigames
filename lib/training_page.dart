@@ -18,6 +18,8 @@ class _TrainingPage extends State<TrainingPage> {
     {"text": "Eat That Cheese", "path": "/eat_that_cheese/training"},
     {"text": "Fruits Slash", "path": "/fruits_slash/training"},
     {"text": "Safe Landing", "path": "/safe_landing/training"},
+    {"text": "Arrow Swiping", "path": "/arrow_swiping/training"},
+
   ];
 
   @override

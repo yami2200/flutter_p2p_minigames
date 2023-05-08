@@ -15,7 +15,8 @@ enum EventType {
   SIDE_PIKE(text: "SIDE_PIKE"),
   PIKE_DEAD(text: "PIKE_DEAD"),
   TILT_MAZE_END(text: "TILT_MAZE_END"),
-  TRAIN_SCHEMA(text: "TRAIN_SCHEMA");
+  TRAIN_SCHEMA(text: "TRAIN_SCHEMA"),
+  ARROW_SWIPING_END(text: "ARROW_SWIPING_END");
 
   const EventType({required this.text});
 
