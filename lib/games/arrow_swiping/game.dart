@@ -34,23 +34,21 @@ class _ArrowSwipingPageState extends FlameGamePageState {
   Map<String, Widget Function(BuildContext, dynamic)>? overlayWidgets() {
     return {
       'winTraining': (context, data) => AlertDialog(
-        title: const Text('Bravo!'),
-        content: const Text('You are a beast!'),
-        actions: [
-          TextButton(
-              onPressed: () {
-                quitTraining();
-                widget.gameInstance?.overlays.remove('winTraining');
-              },
-
-              child: const Text('OK'))
-        ],
-
-      ),
+            title: const Text('Bravo!'),
+            content: const Text('You are a beast!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    quitTraining();
+                    widget.gameInstance?.overlays.remove('winTraining');
+                  },
+                  child: const Text('OK'))
+            ],
+          ),
       'waitingOpponent': (context, data) => const AlertDialog(
-        title: Text('Waiting for your opponent...'),
-        content: Text('You can do it!'),
-      ),
+            title: Text('Waiting for your opponent...'),
+            content: Text('You can do it!'),
+          ),
     };
   }
 }
@@ -72,6 +70,10 @@ class ArrowSwipingInstance extends FlameGameInstance
   final bool training;
 
   ArrowSwipingInstance({required this.training});
+
+  Queue<ArrowDirection> arrowDirections = Queue();
+
+  bool spawnArrow = false;
 
   @override
   Future<void> onLoad() async {
@@ -111,7 +113,8 @@ class ArrowSwipingInstance extends FlameGameInstance
           if (training) {
             overlays.add("winTraining");
           } else {
-            GameParty().sendToOpponent(jsonEncode(EventData(EventType.ARROW_SWIPING_END.text, jsonEncode({}))));
+            GameParty().sendToOpponent(jsonEncode(
+                EventData(EventType.ARROW_SWIPING_END.text, jsonEncode({}))));
             getParentWidget()?.setCurrentPlayerScore(score);
             overlays.add("waitingOpponent");
           }
@@ -147,7 +150,7 @@ class ArrowSwipingInstance extends FlameGameInstance
   void update(double dt) {
     super.update(dt);
 
-    if (arrowsCount >= maxArrows) {
+    if (!spawnArrow || arrowsCount >= maxArrows) {
       return;
     }
 
@@ -159,12 +162,29 @@ class ArrowSwipingInstance extends FlameGameInstance
   }
 
   void _addArrow() {
-    var direction =
-        ArrowDirection.values[Random().nextInt(ArrowDirection.values.length)];
+    if (arrowDirections.isEmpty) {
+      return;
+    }
+    var direction = arrowDirections.removeFirst();
     var position = Vector2(size.x / 2, 100);
     var arrow = Arrow(direction, position: position, speed: arrowSpeed);
     add(arrow);
     arrowsCount++;
+  }
+
+  Object arrowDirectionToJson(ArrowDirection arrowDirection) {
+    return arrowDirection.name;
+  }
+  ArrowDirection arrowDirectionFromJson(dynamic json) {
+    return ArrowDirection.values.firstWhere((element) => element.name == json);
+  }
+
+  List<ArrowDirection> randomArrowDirections(int count) {
+    var directions = <ArrowDirection>[];
+    for (var i = 0; i < count; i++) {
+      directions.add(ArrowDirection.values[Random().nextInt(ArrowDirection.values.length)]);
+    }
+    return directions;
   }
 
   @override
@@ -177,7 +197,22 @@ class ArrowSwipingInstance extends FlameGameInstance
 
   @override
   void onMessageFromServer(EventData message) {
-    if (message.type == EventType.ARROW_SWIPING_END.text) {
+    if (message.type == EventType.ARROW_SWIPING_START.text) {
+
+      List<dynamic> json = jsonDecode(message.data);
+
+      List<ArrowDirection> arrowDirectionsL = json.map((e) => arrowDirectionFromJson(e)).toList();
+
+      print(json);
+      print(arrowDirectionsL);
+
+      arrowDirections.addAll(arrowDirectionsL);
+
+
+
+
+      spawnArrow = true;
+    } else if (message.type == EventType.ARROW_SWIPING_END.text) {
       getParentWidget()?.setCurrentPlayerScore(score);
       overlays.add("waitingOpponent");
     }
@@ -186,5 +221,18 @@ class ArrowSwipingInstance extends FlameGameInstance
   @override
   void onStartGame() {
     getParentWidget()?.setMainPlayerText("$score/$maxArrows");
+
+    if (training) {
+      arrowDirections.addAll(randomArrowDirections(maxArrows));
+      spawnArrow = true;
+      return;
+    }
+
+    if (GameParty().isServer()) {
+      var randomArrowDirections = this.randomArrowDirections(maxArrows);
+      arrowDirections.addAll(randomArrowDirections);
+      GameParty().sendToOpponent(jsonEncode(EventData(EventType.ARROW_SWIPING_START.text, jsonEncode(randomArrowDirections.map(arrowDirectionToJson).toList()))));
+      spawnArrow = true;
+    }
   }
 }
