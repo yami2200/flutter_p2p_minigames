@@ -74,6 +74,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   final Paint _slashPaint = Paint()..style = PaintingStyle.stroke..strokeWidth = 10..color = Colors.grey;
   late Slash _slash = Slash(initialPoints: [], paint: _slashPaint);
   final bool training;
+  bool finished = false;
 
   int slicedFruits = 0;
 
@@ -155,15 +156,6 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
           fruit.slice();
           slicedFruits = min(slicedFruits + 1, maxSlicedFruits);
           getParentWidget()?.setMainPlayerText("$slicedFruits fruits\nsliced!");
-          if (slicedFruits >= maxSlicedFruits) {
-            if (training) {
-              overlays.add("winTraining");
-            } else {
-              GameParty().sendToOpponent(jsonEncode(EventData(EventType.FRUITS_SLASH_END.text, jsonEncode({}))));
-              getParentWidget()?.setCurrentPlayerScore(slicedFruits);
-              overlays.add("waitingOpponent");
-            }
-          }
         }
       });
 
@@ -176,6 +168,16 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
     });
 
     if (slicedFruits >= maxSlicedFruits) {
+      if (training) {
+        overlays.add("winTraining");
+      } else {
+        if(!finished){
+          finished = true;
+          GameParty().sendToOpponent(jsonEncode(EventData(EventType.FRUITS_SLASH_END.text, jsonEncode({}))));
+          getParentWidget()?.setCurrentPlayerScore(slicedFruits);
+          overlays.add("waitingOpponent");
+        }
+      }
       return;
     }
     if (fruits.length < 4) {
@@ -187,21 +189,27 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   @override
   void onMessageFromClient(EventData message) {
     if (message.type == EventType.FRUITS_SLASH_END.text) {
-      getParentWidget()?.setCurrentPlayerScore(slicedFruits);
-      overlays.add("waitingOpponent");
+      if(!finished){
+        getParentWidget()?.setCurrentPlayerScore(slicedFruits);
+        overlays.add("waitingOpponent");
+        finished = true;
+      }
     }
   }
 
   @override
   void onMessageFromServer(EventData message) {
     if (message.type == EventType.FRUITS_SLASH_END.text) {
-      getParentWidget()?.setCurrentPlayerScore(slicedFruits);
-      overlays.add("waitingOpponent");
+      if(!finished){
+        getParentWidget()?.setCurrentPlayerScore(slicedFruits);
+        overlays.add("waitingOpponent");
+        finished = true;
+      }
     }
   }
 
   @override
   void onStartGame() {
-    // TODO: implement onStartGame
+    getParentWidget()?.setMainPlayerText("0 fruit\nsliced!");
   }
 }
