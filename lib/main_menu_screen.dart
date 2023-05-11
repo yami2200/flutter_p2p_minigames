@@ -173,7 +173,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ),
               SizedBox(height: 50),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
