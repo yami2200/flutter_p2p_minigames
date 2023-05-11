@@ -77,7 +77,7 @@ class EatThatCheeseInstance extends FlameGameInstance
   void onCheeseCollision() {
     updateCheese();
     _cheeseCount++;
-    getParentWidget()?.setMainPlayerText("You ate $_cheeseCount cheese!");
+    getParentWidget()?.setMainPlayerText("$_cheeseCount cheese\neated!");
 
     if (_cheeseCount >= maxCheese) {
       remove(_rat);
