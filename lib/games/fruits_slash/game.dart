@@ -72,7 +72,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   final Random _random = Random();
 
   final Paint _slashPaint = Paint()..style = PaintingStyle.stroke..strokeWidth = 10..color = Colors.grey;
-  late Slash _slash = Slash(initialPoints: [], paint: _slashPaint);
+  late final Slash _slash = Slash(initialPoints: [], paint: _slashPaint);
   final bool training;
   bool finished = false;
 
@@ -85,6 +85,8 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
     for (int i = 0; i < 4; i++) {
       addFruit();
     }
+
+    add(_slash);
   }
 
   void addFruit() {
@@ -132,20 +134,6 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   void onDragUpdate(DragUpdateEvent event) {
     if (slicedFruits >= maxSlicedFruits) return;
     _slash.addPoint(event.localPosition);
-  }
-
-  @override
-  void onDragEnd(DragEndEvent event) {
-    if (slicedFruits >= maxSlicedFruits) return;
-    remove(_slash);
-  }
-
-  @override
-  void onDragStart(DragStartEvent event) {
-    if (slicedFruits >= maxSlicedFruits) return;
-    _slash = Slash(initialPoints: [event.localPosition], paint: _slashPaint );
-
-    add(_slash);
   }
 
   @override
