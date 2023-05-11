@@ -75,7 +75,7 @@ class EatThatCheeseInstance extends FlameGameInstance
   late Vector2 smallestScreenSize;
 
   void onCheeseCollision() {
-    updateCheese();
+    if(cheesePositions.isNotEmpty) updateCheese();
     _cheeseCount++;
     getParentWidget()?.setMainPlayerText("$_cheeseCount cheese\neated!");
 
