@@ -15,6 +15,9 @@ class Arrow extends SpriteComponent {
 
   ArrowDirection direction;
   double speed;
+  double sizeY = 0.0;
+  Function()? onLeaveScreen;
+  bool waitEnd = false;
 
   Arrow(this.direction, {required Vector2 position, required this.speed})
       : super(size: Vector2.all(100), position: position) {
@@ -27,9 +30,19 @@ class Arrow extends SpriteComponent {
     add(RectangleHitbox());
   }
 
+  void addLeaveScreenEventListener(Function() onLeaveScreenE, double sizeScreenY) {
+    sizeY = sizeScreenY;
+    onLeaveScreen = onLeaveScreenE;
+    waitEnd = true;
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
     y += speed * dt;
+    if (waitEnd && y > sizeY) {
+      onLeaveScreen!();
+      waitEnd = false;
+    }
   }
 }

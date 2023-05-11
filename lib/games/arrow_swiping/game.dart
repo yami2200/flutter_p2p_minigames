@@ -60,6 +60,7 @@ class ArrowSwipingInstance extends FlameGameInstance
   double _spawnArrowTimer = 0;
   final int maxArrows = 20;
   int arrowsCount = 0;
+  bool finished = false;
 
   Arrow? selectedArrow;
 
@@ -104,23 +105,26 @@ class ArrowSwipingInstance extends FlameGameInstance
       if (_isSwipeDirectionCorrect(swipeAngle, selectedArrow!.direction)) {
         score++;
         remove(selectedArrow!);
+        if(selectedArrow!.waitEnd){
+          if (training) {
+            overlays.add("winTraining");
+          } else {
+            finishGame();
+          }
+        }
         selectedArrow = null;
         blackBox.showOverlay();
 
         getParentWidget()?.setMainPlayerText("$score/$maxArrows");
-
-        if (score >= maxArrows) {
-          if (training) {
-            overlays.add("winTraining");
-          } else {
-            GameParty().sendToOpponent(jsonEncode(
-                EventData(EventType.ARROW_SWIPING_END.text, jsonEncode({}))));
-            getParentWidget()?.setCurrentPlayerScore(score);
-            overlays.add("waitingOpponent");
-          }
-        }
       }
     }
+  }
+
+  void finishGame(){
+    if(finished) return;
+    finished = true;
+    getParentWidget()?.setCurrentPlayerScore(score);
+    overlays.add("waitingOpponent");
   }
 
   bool _isSwipeDirectionCorrect(double swipeAngle, ArrowDirection direction) {
@@ -168,6 +172,9 @@ class ArrowSwipingInstance extends FlameGameInstance
     var direction = arrowDirections.removeFirst();
     var position = Vector2(size.x / 2, 100);
     var arrow = Arrow(direction, position: position, speed: arrowSpeed);
+    if(arrowDirections.isEmpty){
+      arrow.addLeaveScreenEventListener(finishGame, size.y);
+    }
     add(arrow);
     arrowsCount++;
   }
@@ -188,12 +195,7 @@ class ArrowSwipingInstance extends FlameGameInstance
   }
 
   @override
-  void onMessageFromClient(EventData message) {
-    if (message.type == EventType.ARROW_SWIPING_END.text) {
-      getParentWidget()?.setCurrentPlayerScore(score);
-      overlays.add("waitingOpponent");
-    }
-  }
+  void onMessageFromClient(EventData message) {}
 
   @override
   void onMessageFromServer(EventData message) {
@@ -208,13 +210,7 @@ class ArrowSwipingInstance extends FlameGameInstance
 
       arrowDirections.addAll(arrowDirectionsL);
 
-
-
-
       spawnArrow = true;
-    } else if (message.type == EventType.ARROW_SWIPING_END.text) {
-      getParentWidget()?.setCurrentPlayerScore(score);
-      overlays.add("waitingOpponent");
     }
   }
 
