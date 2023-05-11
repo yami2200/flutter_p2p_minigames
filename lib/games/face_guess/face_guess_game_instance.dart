@@ -148,14 +148,14 @@ class FaceGuessGameInstance extends FlameGameInstance{
       currentWheel = FaceWheelComp(
           steps[stepIndex],
           training ? Vector2(size.x / 2 - s / 2, 200) : Vector2(size.x / 4 - s / 2, 180),
-          Vector2(s as double, s as double));
+          Vector2(s.toDouble(), s.toDouble()));
           await add(currentWheel!);
       currentWheel!.start();
     } else {
       opponentWheel = FaceWheelComp(
           steps[opponentStepIndex],
           Vector2(size.x / 4 * 3 - s / 2, 180),
-          Vector2(s as double, s as double));
+          Vector2(s.toDouble(), s.toDouble()));
           await add(opponentWheel!);
       opponentWheel!.start();
     }
