@@ -35,8 +35,16 @@ class P2PConnection implements Connection {
     socket?.inputStream.listen((data) {
       var msg = utf8.decode(data.data);
       log("Received from ${isHost ? "Client" : "Host"} $msg");
-      EventData eventData = EventData.fromJson(jsonDecode(msg));
-      listeners.forEach((listener) => listener(eventData));
+      String separatedMessage = msg.replaceAll("}{", "}||{");
+      List<String> jsonObjects = separatedMessage.split("||");
+      jsonObjects.forEach((element) {
+        try {
+          EventData eventData = EventData.fromJson(jsonDecode(element));
+          listeners.forEach((listener) => listener(eventData));
+        } catch (e) {
+          log("Error: $e");
+        }
+      });
     });
   }
 
@@ -56,8 +64,16 @@ class P2PConnection implements Connection {
       buffer += msg;
       if (data.dataAvailable == 0) {
         log("Data Received from ${isHost ? "Client" : "Host"}: $buffer");
-        EventData eventData = EventData.fromJson(jsonDecode(buffer));
-        listeners.forEach((listener) => listener(eventData));
+        String separatedMessage = buffer.replaceAll("}{", "}||{");
+        List<String> jsonObjects = separatedMessage.split("||");
+        jsonObjects.forEach((element) {
+          try {
+            EventData eventData = EventData.fromJson(jsonDecode(element));
+            listeners.forEach((listener) => listener(eventData));
+          } catch (e) {
+            log("Error: $e");
+          }
+        });
         buffer = "";
       }
     });
