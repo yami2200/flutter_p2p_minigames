@@ -154,7 +154,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
         if (_isCollision(fruit, _slash)) {
           fruit.slice();
           slicedFruits = min(slicedFruits + 1, maxSlicedFruits);
-          getParentWidget()?.setMainPlayerText("You sliced $slicedFruits fruit!");
+          getParentWidget()?.setMainPlayerText("$slicedFruits fruits\nsliced!");
           if (slicedFruits >= maxSlicedFruits) {
             if (training) {
               overlays.add("winTraining");
