@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import "dart:developer" as dev;
 
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,7 @@ class FaceGuessGameInstance extends FlameGameInstance{
     steps.add(await WheelStep.create(0.4, "faceguess/mouth/Mouth", 5));
     steps.add(await WheelStep.create(0.3, "faceguess/nose/Nose", 5));
 
+    dev.log("steps loaded");
 
     if(GameParty().isServer()) {
 
@@ -59,7 +61,12 @@ class FaceGuessGameInstance extends FlameGameInstance{
   }
 
   void generateFaceToGuess(List<int> indexes) async{
+    if(steps.length < 4) {
+      await Future.delayed(Duration(milliseconds: 200), () => generateFaceToGuess(indexes));
+      return;
+    }
     for(int i = 0; i < steps.length; i++){
+      dev.log("generating face $i");
       FaceWheelComp comp = FaceWheelComp(steps[i], Vector2(size.x / 2 - 330 / 2, 200), Vector2(330, 330));
       wheelsAnswer.add(comp);
       await add(comp);
@@ -106,6 +113,7 @@ class FaceGuessGameInstance extends FlameGameInstance{
         if(indexesString[i].isEmpty) continue;
         indexesAnswer.add(int.parse(indexesString[i].replaceAll(",","")));
       }
+      dev.log("generate face received");
       generateFaceToGuess(indexesAnswer);
     }
   }
