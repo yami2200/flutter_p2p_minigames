@@ -1,11 +1,12 @@
 import 'package:flame/cache.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_p2p_minigames/games/fruits_slash/slash.dart';
+import 'package:flutter_p2p_minigames/games/fruits_slash/game.dart';
+import 'package:flutter_p2p_minigames/games/fruits_slash/slashed_fruit.dart';
 
 import 'fruit_type.dart';
 
-class Fruit extends SpriteComponent {
+class Fruit extends SpriteComponent with HasGameRef<FruitsSlashInstance> {
   Fruit(
     this.fruitType, {
     required this.velocity,
@@ -54,11 +55,30 @@ class Fruit extends SpriteComponent {
     add(CircleHitbox());
   }
 
+  late SlashedFruit leftSlice;
+  late SlashedFruit rightSlice;
+
   void slice() {
     isSliced = true;
-    // make it fall very fast
-    velocity.y = 1000;
+    final leftSliceVelocity = Vector2(velocity.x - 100, velocity.y + 10);
+    final rightSliceVelocity = Vector2(velocity.x + 100, velocity.y + 10);
+    leftSlice = SlashedFruit(fruitType,
+        velocity: leftSliceVelocity,
+        rotationSpeed: rotationSpeed,
+        position: position.clone());
+    rightSlice = SlashedFruit(fruitType,
+        velocity: rightSliceVelocity,
+        rotationSpeed: rotationSpeed,
+        position: position.clone(), isRight: true);
+
+    gameRef.add(leftSlice);
+    gameRef.add(rightSlice);
+
+    gameRef.remove(this);
+
   }
+
+
 
 
   @override

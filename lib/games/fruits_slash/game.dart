@@ -168,9 +168,7 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
       }
       return;
     }
-    if (fruits.length < 4) {
-      addFruit();
-    }
+    children.whereType<Fruit>().length < 4 ? addFruit() : null;
   }
 
 
