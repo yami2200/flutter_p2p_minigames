@@ -29,6 +29,7 @@ class SafeLandingsGame extends FlameGameInstance
 
   late final Countdown countdown;
   late final Countdown countdownOpponent;
+  bool countdownfinished = false;
 
   late final StartButton startButton;
   bool isTraining;
@@ -52,10 +53,11 @@ class SafeLandingsGame extends FlameGameInstance
 
     add(player = Player(
         onLand: () {
+          countdownfinished = true;
           countdown.pause();
-          if (countdown.isFinished) {
+          if (countdown.getValue() < 1) {
             // display win message
-            getParentWidget()?.setCurrentPlayerScore(20);
+            getParentWidget()?.setCurrentPlayerScore(10 + ((1-countdown.getValue()) * 10).round());
             if (isTraining) {
               overlays.add("winTraining");
             } else {
@@ -63,7 +65,8 @@ class SafeLandingsGame extends FlameGameInstance
             }
           } else {
             // display lose message
-            getParentWidget()?.setCurrentPlayerScore(20);
+            if(countdown.getValue() < 2) {getParentWidget()?.setCurrentPlayerScore(((2-countdown.getValue()) * 10).round());}
+            else {getParentWidget()?.setCurrentPlayerScore(0);}
             if (isTraining) {
               overlays.add("lostTraining");
             } else {
@@ -79,13 +82,17 @@ class SafeLandingsGame extends FlameGameInstance
     add(ScreenHitbox());
 
     add(countdown = Countdown(onCountdownFinish: () {
+      if(countdownfinished) return;
+      countdownfinished = true;
       getParentWidget()?.setCurrentPlayerScore(0);
       if (isTraining) {
         overlays.add("lostTraining");
       } else {
         overlays.add("waitingOpponent");
       }
-      remove(landingPlatform);
+      try {
+        remove(landingPlatform);
+      } catch (e) {}
     }));
 
     add(startButton = StartButton(

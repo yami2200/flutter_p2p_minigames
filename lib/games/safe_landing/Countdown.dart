@@ -21,6 +21,9 @@ class Countdown extends PositionComponent with HasGameRef<SafeLandingsGame> {
   Future<void> onLoad() async {
     }
 
+    double getValue(){
+      return _countdown;
+    }
 
 
   @override

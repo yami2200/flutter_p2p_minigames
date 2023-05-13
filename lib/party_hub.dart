@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/utils/GameInfo.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
 import 'package:flutter_p2p_minigames/utils/PlayerInGame.dart';
+import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:flutter_p2p_minigames/widgets/PlayerScoresRow.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,10 +29,17 @@ class _GameHubPageState extends State<GameHubPage> {
   int _countdown = GameParty().timeBetweenGames;
   GameInfo? nextGame = null;
   Timer? _timer;
+  bool end = false;
+  String winner = "";
 
   @override
   void initState() {
     super.initState();
+    if(_gamesPlayed == _totalGames){
+      GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.READY.text, "ready")));
+      onPartyEnd();
+      return;
+    }
     GameParty().connection!.clearMessageListener();
     if(GameParty().isServer()) {
       nextGame = GameParty().getNextGame();
@@ -72,6 +80,21 @@ class _GameHubPageState extends State<GameHubPage> {
     });
     dev.log("Listener Setup");
     GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.READY.text, "ready")));
+  }
+
+  void onPartyEnd(){
+    String ww = "";
+    int maxScore = -1;
+    for (var p in GameParty().playerList) {
+      if(p.score > maxScore){
+        maxScore = p.score;
+        ww = p.playerInfo.username;
+      }
+    }
+    setState(() {
+      winner = ww;
+      end = true;
+    });
   }
 
   @override
@@ -137,7 +160,7 @@ class _GameHubPageState extends State<GameHubPage> {
             color: const Color.fromRGBO(32, 52, 133, 0.8),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child:Column(
+              child: !end ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
@@ -156,7 +179,45 @@ class _GameHubPageState extends State<GameHubPage> {
                         fontFamily: 'SuperBubble',
                       ),
                     ),
-                  ]),
+                  ]) : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    const Text(
+                    'FINISHED',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: 'SuperBubble',
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    '$winner won the game !',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontFamily: 'SuperBubble',
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FancyButton(
+                    size: 30,
+                    color: const Color(0xFFCA3034),
+                    onPressed: () {
+                      BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
+                      ctx!.go("/hub");
+                    },
+                    child: const Text(
+                      "Quit",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'SuperBubble',
+                      ),
+                    ),
+                  ),
+                ]
+              ),
             ),
           ),
           const Spacer(),
