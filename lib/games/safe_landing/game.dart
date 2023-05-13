@@ -179,7 +179,7 @@ class SafeLandingsGame extends FlameGameInstance
 
   @override
   void onStartGame() {
-    // TODO: implement onStartGame
+    getParentWidget()!.playMusic("audios/safelanding.mp3");
   }
 }
 

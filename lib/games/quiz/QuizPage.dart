@@ -133,6 +133,7 @@ class _QuizPageState extends GamePageState {
   @override
   void onStartGame(){
     updatePlayerText();
+    playMusic("audios/swipe.mp3");
   }
 
   void updatePlayerText(){

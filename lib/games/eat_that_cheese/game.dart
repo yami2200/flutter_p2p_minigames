@@ -198,6 +198,8 @@ class EatThatCheeseInstance extends FlameGameInstance
   @override
   void onStartGame() {
 
+    getParentWidget()!.playMusic("audios/eatcheese.mp3");
+
     if (training) {
       // generate random positions
       List<Vector2> positions = generateRandomPositions();

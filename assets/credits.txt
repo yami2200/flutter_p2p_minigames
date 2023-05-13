@@ -2,3 +2,4 @@
 - Backgrounds Assets : AI generated with Bing Creator, Upscaled with upscale.media
 - Title font (free) : Coffee Cake
 - UI font (free) : Super Bubble
+- Music and Sounds : Mario Part 1 & 2 & 3 (see details on github)

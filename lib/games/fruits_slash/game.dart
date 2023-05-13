@@ -197,5 +197,6 @@ class FruitsSlashInstance extends FlameGameInstance with DragCallbacks, HasColli
   @override
   void onStartGame() {
     getParentWidget()?.setMainPlayerText("0 fruit\nsliced!");
+    getParentWidget()!.playMusic("audios/fruits.mp3");
   }
 }

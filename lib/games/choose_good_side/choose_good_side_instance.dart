@@ -63,6 +63,7 @@ class ChooseGoodSideGameInstance extends FlameGameInstance with PanDetector{
   @override
   void onStartGame() {
     getParentWidget()!.setMainPlayerText("Life:\n$life");
+    getParentWidget()!.playMusic("audios/goodside.mp3");
   }
 
 

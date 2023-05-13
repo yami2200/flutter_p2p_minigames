@@ -217,6 +217,7 @@ class ArrowSwipingInstance extends FlameGameInstance
   @override
   void onStartGame() {
     getParentWidget()?.setMainPlayerText("$score/$maxArrows");
+    getParentWidget()!.playMusic("audios/swipe.mp3");
 
     if (training) {
       arrowDirections.addAll(randomArrowDirections(maxArrows));

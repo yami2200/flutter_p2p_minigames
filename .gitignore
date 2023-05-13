@@ -44,3 +44,4 @@ app.*.map.json
 /android/app/release
 /dev_ws_server/package-lock.json
 /dev_ws_server/node_modules/
+/assets/audios/

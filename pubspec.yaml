@@ -44,6 +44,7 @@ dependencies:
   json_annotation: ^4.8.0
   web_socket_channel: ^2.4.0
   url_launcher: ^6.1.10
+  audioplayers: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +95,7 @@ flutter:
     - assets/images/tilt_maze/
     - assets/images/train/
     - assets/images/arrow_swiping/
+    - assets/audios/
 
   fonts:
     - family: CoffeeCake

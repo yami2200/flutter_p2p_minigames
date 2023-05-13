@@ -69,6 +69,7 @@ class TrainTallyGameInstance extends FlameGameInstance with TapDetector{
   @override
   void onStartGame() {
     getParentWidget()!.setMainPlayerText("Counting\nPassengers");
+    getParentWidget()!.playMusic("audios/traintally.mp3");
     startMoving();
   }
 

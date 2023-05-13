@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import "dart:developer" as dev;
 
-import 'package:flame/game.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,6 +10,7 @@ import '../games/FlameGameInstance.dart';
 import '../main.dart';
 import '../network/EventData.dart';
 import '../network/EventType.dart';
+import '../utils/Config.dart';
 import '../utils/GameParty.dart';
 import '../utils/PlayerInfo.dart';
 import 'TwoPlayerInfo.dart';
@@ -18,6 +20,7 @@ class GamePage extends StatefulWidget {
   final bool training;
   final String background;
   final FlameGameInstance? gameInstance;
+  final musicPlayer = AudioPlayer();
 
   GamePage({super.key, required this.bannerColor, required this.training, required this.background, this.gameInstance});
 
@@ -76,11 +79,13 @@ class GamePageState extends State<GamePage> {
       GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.READY.text, "ready")));
       if(GameParty().isServer()){
         Future.delayed(const Duration(milliseconds: 150), () {
+          _playStartSound();
           onStartGame();
         });
       }
     } else {
       Future.delayed(const Duration(milliseconds: 250), () {
+        _playStartSound();
         onStartGame();
       });
     }
@@ -94,12 +99,39 @@ class GamePageState extends State<GamePage> {
     }
   }
 
+  void _playStartSound() async{
+    if(!Config.hasAudio) return;
+    final player = AudioPlayer();
+    await player.setSource(AssetSource('audios/start.wav'));
+    await player.resume();
+    dev.log("Start sound played");
+  }
+
+  void _playfinishSound() async{
+    if(!Config.hasAudio) return;
+    final player = AudioPlayer();
+    await player.setSource(AssetSource('audios/finish.wav'));
+    await player.resume();
+    dev.log("Finish sound played");
+
+    await widget.musicPlayer.stop();
+    await widget.musicPlayer.dispose();
+  }
+
+  void playMusic(String path) async{
+    if(!Config.hasAudio) return;
+    await widget.musicPlayer.setSource(AssetSource(path));
+    await widget.musicPlayer.resume();
+    widget.musicPlayer.setReleaseMode(ReleaseMode.loop);
+  }
+
   void _checkIsReadyMessage(EventData message){
     if(message.type == EventType.READY.text){
       if(GameParty().isServer()) {
         BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
         ctx!.go("/hub");
       } else {
+        _playStartSound();
         onStartGame();
       }
     }
@@ -107,6 +139,7 @@ class GamePageState extends State<GamePage> {
 
   void quitTraining(){
     if(widget.training){
+      _playfinishSound();
       BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
       ctx!.go("/training");
     }
@@ -114,6 +147,7 @@ class GamePageState extends State<GamePage> {
 
   void setCurrentPlayerScore(int scoreGain){
     if(widget.training) return;
+    _playfinishSound();
     GameParty().playerList.firstWhere((p) => p.playerInfo.username == GameParty().player!.username).score += scoreGain;
     GameParty().connection!.sendMessageToClient(jsonEncode(EventData(EventType.ADD_PLAYER_SCORE.text, scoreGain.toString())));
     GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.ADD_PLAYER_SCORE.text, scoreGain.toString())));

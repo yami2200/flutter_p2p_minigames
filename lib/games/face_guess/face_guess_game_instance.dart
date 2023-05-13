@@ -227,6 +227,7 @@ class FaceGuessGameInstance extends FlameGameInstance{
   @override
   void onStartGame() {
     getParentWidget()!.setMainPlayerText("Step ${stepIndex + 1}");
+    getParentWidget()!.playMusic("audios/faceguess.mp3");
   }
 
 }
