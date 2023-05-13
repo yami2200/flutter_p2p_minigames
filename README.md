@@ -12,13 +12,13 @@
 Frenzy Camp is a Flutter project that enables peer-to-peer connectivity for an 1v1 multiplayer gaming experience. 
 This repository contains a collection of eight distinct mini-games, where players can connect with each other and engage in thrilling battles across a series of five randomly selected mini-games.
 
-### Quick Reminder
+## 📖 Quick Reminder
 
 This project was created as a school project for Mobile programming.
 
-## Games
+# 🎮 Games
 
-### 1. Face Guess
+## 1. 🎭 Face Guess
 **Description :** Face Guess is a mini-game that puts your observation and timing skills to the test. 
 Players are presented with a random face consisting of eyes, nose, mouth, and face shape. 
 The face is displayed for a brief 8-second period before disappearing. 
@@ -26,7 +26,7 @@ After the countdown, players must click on each face element at the right moment
 
 **Input :** tap on the screen
 
-**Feature :** 
+**Features :**
 - Tap event detection
 - Real-time face element animation replication
 
@@ -34,7 +34,7 @@ After the countdown, players must click on each face element at the right moment
 
 ![qsd](/docs/faceguess.gif)
 
-## Technical information :
+## 🔧 Technical information :
 
 ### 1. Testing
 The connectivity have been designed to implements a specific interface. This design allowed us to develop a peer-to-peer connectivity and a websocket connectivity without changing the code of the games.
