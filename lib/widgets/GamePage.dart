@@ -4,6 +4,7 @@ import "dart:developer" as dev;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_p2p_minigames/utils/SoloChallenge.dart';
 import 'package:go_router/go_router.dart';
 
 import '../games/FlameGameInstance.dart';
@@ -140,6 +141,10 @@ class GamePageState extends State<GamePage> {
   void quitTraining(){
     if(widget.training){
       _playfinishSound();
+      if(SoloChallenge.inChallenge){
+        SoloChallenge.continueChallenge();
+        return;
+      }
       BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
       ctx!.go("/training");
     }

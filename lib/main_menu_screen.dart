@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/utils/Config.dart';
+import 'package:flutter_p2p_minigames/utils/SoloChallenge.dart';
 import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
@@ -167,6 +168,21 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         onPressed: () => GoRouter.of(context).push('/training'),
                         child: const Text(
                           "Camp Training",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontFamily: 'SuperBubble',
+                          ),
+                        )
+                    ),
+                    const SizedBox(height: 15),
+                    FancyButton(
+                        size: 30,
+                        color: const Color(0xFF206BCC),
+                        onPressed: () => SoloChallenge.startChallenge(),
+                        child: const Text(
+                          "Solo Challenge",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
