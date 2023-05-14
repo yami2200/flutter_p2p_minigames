@@ -202,9 +202,6 @@ class SafeLandingsGameWidget extends FlameGamePage {
 }
 
 class _SafeLandingsGameWidgetState extends FlameGamePageState {
-  @override
-  void onStartGame() {}
-
   // ALL METHODS AVAILABLE IN THE GAME PAGE TEMPLATE ARE ALSO AVAIBLE IN FLAME GAME PAGE
 
   @override

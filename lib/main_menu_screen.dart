@@ -6,6 +6,7 @@ import 'package:flutter_p2p_minigames/utils/Config.dart';
 import 'package:flutter_p2p_minigames/widgets/FancyButton.dart';
 import 'package:go_router/go_router.dart';
 
+import 'network/PeerToPeer.dart';
 import 'utils/Storage.dart';
 
 class MainMenuScreen extends StatefulWidget {
@@ -55,6 +56,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       }
     });
     _refreshUserData();
+    //refreshP2P();
+  }
+
+  void refreshP2P() async {
+    await PeerToPeer().disconnect();
+    PeerToPeer().register();
   }
 
   @override
@@ -86,12 +93,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Image.asset(
                 'assets/ui/title.png',
                 height: 250,
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +106,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     isDev
                         ? FancyButton(
                         size: 30,
-                        color: Color(0xFFCA3034),
+                        color: const Color(0xFFCA3034),
                         onPressed: () => GoRouter.of(context).push('/create/dev'),
                         child: const Text(
                           "Create Room (Dev)",
@@ -112,7 +119,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         )
                     ) : FancyButton(
                         size: 30,
-                        color: Color(0xFFCA3034),
+                        color: const Color(0xFFCA3034),
                         onPressed: () => GoRouter.of(context).push('/create/c'),
                         child: const Text(
                           "Create Room",
@@ -124,11 +131,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                         )
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     isDev
                         ? FancyButton(
                       size: 30,
-                      color: Color(0xFFDE6912),
+                      color: const Color(0xFFDE6912),
                         onPressed: () => GoRouter.of(context).push('/join/dev'),
                       child: const Text(
                         "Join Room (Dev)",
@@ -141,7 +148,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       )
                     ) : FancyButton(
                         size: 30,
-                        color: Color(0xFFDE6912),
+                        color: const Color(0xFFDE6912),
                         onPressed: () => GoRouter.of(context).push('/join/c'),
                         child: const Text(
                           "Join Room",
@@ -153,10 +160,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                         )
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     FancyButton(
                         size: 30,
-                        color: Color(0xFF40CC20),
+                        color: const Color(0xFF40CC20),
                         onPressed: () => GoRouter.of(context).push('/training'),
                         child: const Text(
                           "Camp Training",
@@ -171,7 +178,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
@@ -179,7 +186,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               children: [
                 FancyButton(
                     size: 25,
-                    color: Color(0xFF2439BE),
+                    color: const Color(0xFF2439BE),
                     onPressed: () => GoRouter.of(context).push('/login'),
                     child: const Text(
                       "Edit Profile",
@@ -193,7 +200,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 ),
                 FancyButton(
                     size: 25,
-                    color: Color(0xFF2439BE),
+                    color: const Color(0xFF2439BE),
                     onPressed: () => GoRouter.of(context).push('/credits'),
                     child: const Text(
                       "Credits",
@@ -208,45 +215,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ]
             ),
           ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
     );
-
-    /*
-
-     FutureBuilder<String?>(
-                future: _avatar,
-                builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage("assets/avatars/" + snapshot.data!),
-                          radius: 50,
-                        ),
-                        SizedBox(height: 10),
-                        FutureBuilder<String?>(
-                          future: _username,
-                          builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(snapshot.data!);
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-     */
-
-
   }
 }

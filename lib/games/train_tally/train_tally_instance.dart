@@ -32,30 +32,36 @@ class TrainTallyGameInstance extends FlameGameInstance with TapDetector{
   @override
   void onMessageFromServer(EventData message) {
     if(message.type == EventType.TRAIN_SCHEMA.text){
-      String schema = message.data;
-      int nbWagon = schema.length ~/ 5;
+      createTrainFromServer(message);
+    }
+  }
 
-      String currentSchema = "";
-      int wagonCount = 0;
-      for(int i = 0; i < schema.length; i++){
-        currentSchema += schema[i];
-        if(currentSchema.length == 5){
-          Wagon newWagon;
-          if(wagonCount==nbWagon-1){
-            newWagon = Wagon(Vector2(size.x*2 + wagonCount*721, size.y), trainSprite!, onQuitScreen: onLastWagonQuit);
-          } else {
-            newWagon = Wagon(Vector2(size.x*2 + wagonCount*721, size.y), trainSprite!);
-          }
-          newWagon.addPassengers(currentSchema);
-          newWagon.getPassengers().forEach((element) {
-            add(element);
-          });
-          totalPassengers += newWagon.getNbPassengers();
-          wagons.add(newWagon);
-          add(newWagon);
-          wagonCount++;
-          currentSchema = "";
+  void createTrainFromServer(EventData message) async{
+    String schema = message.data;
+    int nbWagon = schema.length ~/ 5;
+
+    trainSprite = await loadSprite("train/train.png");
+
+    String currentSchema = "";
+    int wagonCount = 0;
+    for(int i = 0; i < schema.length; i++){
+      currentSchema += schema[i];
+      if(currentSchema.length == 5){
+        Wagon newWagon;
+        if(wagonCount==nbWagon-1){
+          newWagon = Wagon(Vector2(size.x*2 + wagonCount*721, size.y), trainSprite!, onQuitScreen: onLastWagonQuit);
+        } else {
+          newWagon = Wagon(Vector2(size.x*2 + wagonCount*721, size.y), trainSprite!);
         }
+        newWagon.addPassengers(currentSchema);
+        newWagon.getPassengers().forEach((element) {
+          add(element);
+        });
+        totalPassengers += newWagon.getNbPassengers();
+        wagons.add(newWagon);
+        add(newWagon);
+        wagonCount++;
+        currentSchema = "";
       }
     }
   }
@@ -68,7 +74,7 @@ class TrainTallyGameInstance extends FlameGameInstance with TapDetector{
 
   @override
   void onStartGame() {
-    getParentWidget()!.setMainPlayerText("Counting\nPassengers");
+    getParentWidget()!.setMainPlayerText("Counting");
     getParentWidget()!.playMusic("audios/traintally.mp3");
     startMoving();
   }
@@ -86,8 +92,8 @@ class TrainTallyGameInstance extends FlameGameInstance with TapDetector{
     Passenger.passenger2 = await loadSprite("train/char2.png");
     Passenger.nopassenger = await loadSprite("train/nochar.jpg");
 
-    trainSprite = await loadSprite("train/train.png");
     if(GameParty().isServer()){
+      trainSprite = await loadSprite("train/train.png");
       int nbWagon = 7 + (Random().nextInt(5));
       for(int i = 0; i < nbWagon; i++){
         Wagon newWagon;

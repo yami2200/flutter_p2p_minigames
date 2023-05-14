@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 import "dart:developer" as dev;
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_p2p_minigames/utils/GameInfo.dart';
 import 'package:flutter_p2p_minigames/utils/GameParty.dart';
@@ -23,6 +24,7 @@ class GameHubPage extends StatefulWidget {
 }
 
 class _GameHubPageState extends State<GameHubPage> {
+  final player = AudioPlayer();
   final int _gamesPlayed = GameParty().gamesPlayed;
   final int _totalGames = GameParty().maxGames;
   final List<PlayerInGame> _players = GameParty().playerList;
@@ -82,7 +84,7 @@ class _GameHubPageState extends State<GameHubPage> {
     GameParty().connection!.sendMessageToServer(jsonEncode(EventData(EventType.READY.text, "ready")));
   }
 
-  void onPartyEnd(){
+  void onPartyEnd() {
     String ww = "";
     int maxScore = -1;
     for (var p in GameParty().playerList) {
@@ -95,6 +97,13 @@ class _GameHubPageState extends State<GameHubPage> {
       winner = ww;
       end = true;
     });
+    playEndMusic(winner == GameParty().player!.username);
+  }
+
+  void playEndMusic(bool winner) async {
+    if(winner) await player.setSource(AssetSource('audios/win.wav'));
+    else await player.setSource(AssetSource('audios/lose.wav'));
+    await player.resume();
   }
 
   @override
@@ -203,8 +212,12 @@ class _GameHubPageState extends State<GameHubPage> {
                     size: 30,
                     color: const Color(0xFFCA3034),
                     onPressed: () {
+                      if(player != null) {
+                        player.stop();
+                        player.dispose();
+                      }
                       BuildContext? ctx = MyApp.router.routerDelegate.navigatorKey.currentContext;
-                      ctx!.go("/hub");
+                      ctx!.go("/");
                     },
                     child: const Text(
                       "Quit",

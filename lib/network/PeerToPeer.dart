@@ -57,6 +57,7 @@ class PeerToPeer {
     if (!await checkPermission()) {
       return;
     }
+
     _subscriptions.add(FlutterP2pPlus.wifiEvents.stateChange!.listen((change) {
       log("Wifi state changed: $change");
     }));
@@ -95,7 +96,11 @@ class PeerToPeer {
       log("Wifi discovery changed: $change");
     }));
 
-    FlutterP2pPlus.register();  // Register to the native events which are send to the streams above
+    try{
+      FlutterP2pPlus.register();
+    } catch (e) {
+      log("Error while registering: $e");
+    }
   }
 
   void onConnectedAsClient(String deviceAdress){
@@ -117,9 +122,13 @@ class PeerToPeer {
 
   void unregister() {
     log("Unreigster from P2P");
-    _subscriptions.forEach((subscription) => subscription.cancel());
-    _subscriptions.clear();
-    FlutterP2pPlus.unregister();  // Unregister from the native events
+    try {
+      _subscriptions.forEach((subscription) => subscription.cancel());
+      _subscriptions.clear();
+      FlutterP2pPlus.unregister();  // Unregister from the native events
+    } catch (e) {
+      log("Error while unregistering: $e");
+    }
   }
 
   void startDiscovery() async {
@@ -129,10 +138,18 @@ class PeerToPeer {
 
   Future<bool?> disconnect() async {
     log("Disconnect from p2p");
-    unregister();
-    if(GameParty().connection != null) GameParty().connection!.close();
-    bool? result = await FlutterP2pPlus.removeGroup();
-    return result;
+    try {
+      unregister();
+      if(GameParty().connection != null) GameParty().connection!.close();
+      GameParty().stopGame();
+      //connectedDevices = [];
+      //isConnected = false;
+      bool? result = await FlutterP2pPlus.removeGroup();
+      return result;
+    } catch (e) {
+      log("Error while disconnecting: $e");
+    }
+    return false;
   }
 
   Future<bool> connect(WifiP2pDevice device) async {
