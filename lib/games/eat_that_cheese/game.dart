@@ -16,7 +16,7 @@ import '../FlameGameInstance.dart';
 import '../components/BackgroundComponent.dart';
 import 'rat.dart';
 
-const int maxCheese = 5;
+const int maxCheese = 500;
 
 class EatThatCheesePage extends FlameGamePage {
   EatThatCheesePage({super.key, required bool training})
@@ -111,7 +111,7 @@ class EatThatCheeseInstance extends FlameGameInstance
     var position = cheesePositions.removeFirst();
 
     // add the cheese
-    _cheese = Cheese(position: position);
+    _cheese = Cheese(position: Vector2(position.x * size.x, position.y * size.y));
     add(_cheese);
   }
 
@@ -119,17 +119,20 @@ class EatThatCheeseInstance extends FlameGameInstance
     var position = cheesePositions.removeFirst();
 
     remove(_cheese);
-    _cheese = Cheese(position: position);
+    _cheese = Cheese(position: Vector2(position.x * size.x, position.y * size.y));
     add(_cheese);
   }
 
   Vector2 randomPositionOnScreen(double maxX, double maxY) {
-    // generate a random position on the screen
-    // the position should not be y <= 200
-    return Vector2(
-      _random.nextDouble() * (maxX),
-      _random.nextDouble() * (maxY - 100) + 100,
-    );
+    // generate a random position on the screen, have a margin of 100px each side
+    var vector = Vector2(
+        _random.nextDouble() * (maxX - 200) + 100,
+        _random.nextDouble() * (maxY - 200) + 100);
+
+    // normalize the position so that it will be a percentage of the screen
+    vector = Vector2(vector.x / maxX, vector.y / maxY);
+
+    return vector;
   }
 
   void _initSensors() {
@@ -139,10 +142,15 @@ class EatThatCheeseInstance extends FlameGameInstance
     });
   }
 
+
+  var lastCheeseTime = DateTime.now();
+
   @override
   void update(double dt) {
     super.update(dt);
     _rat.updateAcceleration(_acceleration);
+
+
   }
 
   @override
