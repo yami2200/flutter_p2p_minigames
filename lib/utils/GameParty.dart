@@ -16,7 +16,7 @@ class GameParty {
   PlayerInfo? opponent;
   final int maxGames = 5;
   bool gameStarted = false;
-  final int timeBetweenGames = Config.devMode ? 3 : 20;
+  final int timeBetweenGames = Config.devMode ? 3 : 10;
   Map<String, GameInfo> gameList = {};
   Set<String> playedGames = {};
   int gamesPlayed = 0;
