@@ -16,7 +16,7 @@ import '../FlameGameInstance.dart';
 import '../components/BackgroundComponent.dart';
 import 'rat.dart';
 
-const int maxCheese = 500;
+const int maxCheese = 5;
 
 class EatThatCheesePage extends FlameGamePage {
   EatThatCheesePage({super.key, required bool training})
