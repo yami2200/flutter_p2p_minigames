@@ -34,6 +34,22 @@ After the countdown, players must click on each face element at the right moment
 
 ![qsd](/docs/faceguess.gif)
 
+## 2. 🍉 Fruits Slash:
+**Description :** Fruits Slash is a game that puts your slicing skills to the test. As fruits move across the screen, your objective is to slice them before your opponent does and proving your lightning-fast reflexes.
+
+**Input :** finger gesture on the screen.
+
+**Features :**
+- Gesture event detection
+- Moving objects animation with slicing collision
+- Real-time score replication
+
+**Screenshots & gif :**
+
+## 3. 🏹 Arrow Swiping:
+
+
+
 ## 🔧 Technical information :
 
 ### 1. Testing
@@ -77,3 +93,24 @@ Sounds and musics are not copyrights free and all credits goes to :
 Audios files are not included in the repository.
 If you have audio files, you can put them in the assets/audios folder.
 Then go in lib/utils/Config and change the hasAudio variable to true.
+
+### 5. Page structure :
+
+```mermaid
+flowchart
+
+MainMenu(Main Menu Page) -. User has no profile .-> Edit(Edit Profile Page)
+Edit(Edit Profile Page) --> MainMenu(Main Menu Page)
+MainMenu(Main Menu Page) --> Camp(Camp Training Page)
+Camp(Camp Training Page) --> Game(Game Page)
+MainMenu(Main Menu Page) --> Join(Join Room Page)
+MainMenu(Main Menu Page) --> Create(Create Room Page)
+Join(Join Room Page) -- Connected with host ---> Room(Room Page)
+Room(Room Page) -- Host starts the game ---> PartyHub(Party Hub Page)
+Create(Create Room Page) ---> PartyHub(Party Hub Page)
+PartyHub(Party Hub Page) ---> Game(Game Page)
+Game(Game Page) -. Party mini game ends .-> PartyHub(Party Hub Page)
+Game(Game Page) -. Training mini game ends .-> Camp(Camp Training Page)
+Game(Game Page) -. Challenge mode ends .-> MainMenu(Main Menu Page)
+PartyHub(Party Hub Page) -. Party ends .-> MainMenu(Main Menu Page)
+```
