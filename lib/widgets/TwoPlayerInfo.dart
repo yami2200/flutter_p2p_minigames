@@ -35,7 +35,7 @@ class TwoPlayerInfo extends StatelessWidget {
                   PlayerInGameInfo(playerInfo: playerInfo, playerText: player1Text),
                   player2 != null
                       ? PlayerInGameInfo(playerInfo: player2!, playerText: player2Text!)
-                      : const Text("Training Mode",
+                      : const Text("Training",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "SuperBubble",

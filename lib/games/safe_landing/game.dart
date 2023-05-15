@@ -49,7 +49,12 @@ class SafeLandingsGame extends FlameGameInstance
 
   @override
   Future<void> onLoad() async {
-    add(BackgroundComponent("background.jpg"));
+    await add(BackgroundComponent("choosegoodside/background_2sides.png"));
+    //add(BackgroundComponent("background.jpg"));
+
+    add(trapdoor = Trapdoor());
+
+    add(landingPlatform = LandingPlatform());
 
     add(player = Player(
         onLand: () {
@@ -75,10 +80,6 @@ class SafeLandingsGame extends FlameGameInstance
           }
         },
         avatar: myAvatar));
-
-    add(trapdoor = Trapdoor());
-
-    add(landingPlatform = LandingPlatform());
     add(ScreenHitbox());
 
     add(countdown = Countdown(onCountdownFinish: () {
@@ -114,11 +115,11 @@ class SafeLandingsGame extends FlameGameInstance
       },
     ));
 
-    player.position = Vector2(size.x / 2 / 2, yPosition);
+    player.position = Vector2(size.x / 2 / 2, yPosition+20);
     trapdoor.position = Vector2(player.x, yPosition + player.size.y);
     landingPlatform.position = Vector2(size.x / 2 / 2, size.y - 50);
     countdown.position =
-        Vector2(landingPlatform.x + 50, landingPlatform.y + 25);
+        Vector2(landingPlatform.x + 60, landingPlatform.y + 25);
 
     if (!isTraining) {
       add(playerOpponent = Player(
@@ -147,7 +148,7 @@ class SafeLandingsGame extends FlameGameInstance
           Vector2(size.x / 2 + size.x / 2 / 2, size.y - 50);
 
       countdownOpponent.position = Vector2(
-          landingPlatformOpponent.x + 50, landingPlatformOpponent.y + 25);
+          landingPlatformOpponent.x + 60, landingPlatformOpponent.y + 25);
     }
   }
 

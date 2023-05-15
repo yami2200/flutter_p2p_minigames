@@ -49,7 +49,7 @@ class Player extends SpriteComponent
         state = PlayerState.landed;
         velocity.x = 0;
         velocity.y = 0;
-        position.y = other.position.y - size.y + 10;
+        position.y = other.position.y - size.y+18;
         onLand();
       }
     }

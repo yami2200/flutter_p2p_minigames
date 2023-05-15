@@ -58,7 +58,7 @@ class Countdown extends PositionComponent with HasGameRef<SafeLandingsGame> {
 
     // Render the text on top of the black rectangle background
     final textSpan = TextSpan(text: _countdown.toStringAsFixed(2), style: const TextStyle(
-      color: Colors.yellow,
+      color: Colors.black,
       fontSize: 30,
     ));
     final textPainter = TextPainter(
