@@ -123,6 +123,10 @@ class ArrowSwipingInstance extends FlameGameInstance
   void finishGame(){
     if(finished) return;
     finished = true;
+    if(getParentWidget()!.widget.training){
+      overlays.add("winTraining");
+      return;
+    }
     getParentWidget()?.setCurrentPlayerScore(score);
     overlays.add("waitingOpponent");
   }
