@@ -16,6 +16,28 @@ This repository contains a collection of eight distinct mini-games, where player
 
 This project was created as a school project for Mobile programming.
 
+### 📋 Requirements
+- ✅ main menu
+- ✅ 6 games with required categories (quiz, sensor, gesture)
+- ✅ solo game mode that launches a series of 3 random games
+- ✅ Discover p2p devices
+- ✅ 1v1 multiplayer game mode where the room owner choose the device to connect to
+- ✅ synchronize game launch between devices
+- ✅ multiplayer score leaderboard
+- ✅ At the end, the winner is displayed. Each device has a winning or losing music.
+
+### 📚 Additional features
+- 2 additional games
+- 1v1 multiplayer game mode that launch a series of 5 random games (each game grants 0 to 20 points)
+- Profile with username and avatar (avatar is displayed as the player in different games)
+- Profile stored on the device
+- Training mode : play any game without a friend
+- Synchronize gaming: each mini game in multiplayer is launched at the same time on both devices
+- Real time: most of the game have realtime features replication (score, movements, animations, etc. sent in realtime to the other player)
+- Party hub : between each multiplayer mini game, the players are sent to a party hub where they can see scores and have 10 seconds to read the description of the next game
+- Different musics for each mini game. 2 sounds to indicate that the game starts or is finished.
+- Multiplayer header banner : a banner is displayed at the top of the screen to indicate avatar and tag of player. It also indicates score or progress in realtime for every mini-games.
+
 # 🎮 Games
 
 ## 1. 🎭 Face Guess
@@ -32,7 +54,7 @@ After the countdown, players must click on each face element at the right moment
 
 **Screenshots & gif :**
 
-![qsd](/docs/faceguess.gif)
+![Face Guess](/docs/faceguess.gif)
 
 ## 2. 🍉 Fruits Slash:
 **Description :** Fruits Slash is a game that puts your slicing skills to the test. As fruits move across the screen, your objective is to slice them before your opponent does and proving your lightning-fast reflexes.
@@ -46,9 +68,89 @@ After the countdown, players must click on each face element at the right moment
 
 **Screenshots & gif :**
 
+![Fruits slash](/docs/fruits.gif)
+
 ## 3. 🏹 Arrow Swiping:
+**Description :** Arrow Swiping is a game that tests your reflexes and accuracy. In this exciting challenge, arrows swiftly descend from the top to the bottom of the screen, and it's your task to swipe in the direction of each arrow before it reaches the bottom.
 
+**Input :** swipe gesture on the screen.
 
+**Features :**
+- Gesture event detection
+- Moving objects animation with replicated spawn.
+
+**Screenshots & gif :**
+
+![Arrow Swiping](/docs/arrow.gif)
+
+## 4. 🧀 Eat that cheese:
+**Description :** Eat That Cheese is a game that puts you in control of a hungry little mouse on a mission to devour cheese. Your objective is simple: be the first to eat five delicious wedges of cheese before your opponent does.
+Using the motion sensors of your phone, the mouse responds to the rotation of your device, moving in the direction corresponding to the phone's rotation.
+
+**Input :** gyroscope motion.
+
+**Features :**
+- Gyroscope event motion detection
+- Cheese spawn points replicated on both devices
+
+**Screenshots & gif :**
+
+![Eat that cheese](/docs/cheese.gif)
+
+## 5. 🚂 Train Tally:
+**Description :** Train Tally is a game that tests your counting skills. In this challenge, a train consisting of a random number of wagons will appear on the screen. Your objective is to count the number of passengers and tap on the screen to select the correct number. 
+
+**Input :** tap on the screen.
+
+**Features :**
+- Tap event detection
+- Moving objects animation with replicated spawn locations of passengers.
+- Each wagon has a different number of passengers and passengers can spawn at random window locations.
+
+**Screenshots & gif :**
+
+![Train Tally](/docs/traintally.gif)
+
+## 6. 🐻 Capyquiz:
+**Description :** Capyquiz is a game that tests your knowledge of the animal kingdom of Capybaras. In this challenge, you will have to answer 5 questions and each good answer give you points.
+
+**Input :** tap on the screen to select answer.
+
+**Features :**
+- Random questions
+- Real Time score and progress replication to other player.
+
+**Screenshots & gif :**
+
+![Capyquiz](/docs/capyquiz.gif)
+
+## 7. 🎲 Choose the good side:
+**Description :** Choose the Good Side is an exciting and suspenseful game that challenges your luck and decision-making skills. You control an avatar that can move between two platforms for a limited time of 8 seconds. At the end of the countdown, both players plummet downwards, with one of the landing platforms rigged with deadly spikes. Your goal is simple: be the last one standing to claim victory.
+
+**Input :** swipe gesture on screen.
+
+**Features :**
+- Gesture event detection
+- Moving objects animation with replicated spawn locations of platforms.
+- Replicated realtime movements of players
+
+**Screenshots & gif :**
+
+![Choose the good side](/docs/choose.gif)
+
+## 8. 🎈 Safe Landing:
+**Description :** Safe Landing is a game that puts your timing and precision skills to the test. In this challenge, you find yourself in a freefall, and your objective is to open a trap that releases your player, timing it perfectly to land on the designated landing platform when the countdown is as close to zero seconds as possible.
+
+**Input :** tap on the screen.
+
+**Features :**
+- Tap event detection
+- Moving objects animation(gravity)
+- Replicated realtime movements of players
+
+**Screenshots & gif :**
+
+![Safe Landing](/docs/safe.gif)
 
 ## 🔧 Technical information :
 
@@ -114,3 +216,6 @@ Game(Game Page) -. Training mini game ends .-> Camp(Camp Training Page)
 Game(Game Page) -. Challenge mode ends .-> MainMenu(Main Menu Page)
 PartyHub(Party Hub Page) -. Party ends .-> MainMenu(Main Menu Page)
 ```
+
+# 📟 Demonstration :
+[![Frenzy Camp demonstration](docs/videolink.jpg)](https://youtu.be/mMLNND7GtqQ)
