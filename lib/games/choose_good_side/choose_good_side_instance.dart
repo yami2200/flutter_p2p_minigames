@@ -97,14 +97,14 @@ class ChooseGoodSideGameInstance extends FlameGameInstance with PanDetector{
     await add(rightPlatform!);
     await add(player = Player(
       avatar: myAvatar,
-      startPosition: GameParty().isServer() ? Vector2(size.x / 2 - 280 / 4 * 3, 545) : Vector2(size.x / 2 - 280 / 4, 545),
+      startPosition: GameParty().isServer() ? Vector2(size.x / 2 - 280 / 2 -40, 545) : Vector2(size.x / 2 - 280 / 2 + 40, 545),
       mainCharacter: true,
       training: getParentWidget()!.widget.training,
     ));
     if(!getParentWidget()!.widget.training){
       await add(playerOpponent = Player(
         avatar: opponentAvatar!,
-        startPosition: GameParty().isServer() ? Vector2(size.x / 2 - 280 / 4, 545) : Vector2(size.x / 2 - 280 / 4 * 3, 545),
+        startPosition: GameParty().isServer() ? Vector2(size.x / 2 - 280 / 2 + 40, 545) : Vector2(size.x / 2 - 280 / 2 - 40, 545),
         mainCharacter: false,
         training: getParentWidget()!.widget.training,
       ));
