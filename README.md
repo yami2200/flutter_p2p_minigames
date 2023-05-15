@@ -12,6 +12,10 @@
 Frenzy Camp is a Flutter project that enables peer-to-peer connectivity for an 1v1 multiplayer gaming experience. 
 This repository contains a collection of eight distinct mini-games, where players can connect with each other and engage in thrilling battles across a series of five randomly selected mini-games.
 
+Made by  :
+- [Romain Briend](https://github.com/yami2200/)
+- [Mael Kerichard](https://github.com/Pixselve)
+
 ## 📖 Quick Reminder
 
 This project was created as a school project for Mobile programming.
@@ -215,6 +219,50 @@ Game(Game Page) -. Party mini game ends .-> PartyHub(Party Hub Page)
 Game(Game Page) -. Training mini game ends .-> Camp(Camp Training Page)
 Game(Game Page) -. Challenge mode ends .-> MainMenu(Main Menu Page)
 PartyHub(Party Hub Page) -. Party ends .-> MainMenu(Main Menu Page)
+```
+
+### 6. Game structure :
+The pages have been designed to be as modular as possible. Every multiplayer and solo game logic that are common to all mini games have been packed into GamePage class. All games pages inherit from this class. This class is also used to handle the network messages and the training mode.
+
+```mermaid
+classDiagram
+
+StatefulWidget <|-- GamePage
+GamePage <|-- FlameGamePage
+
+class GamePage{
+        +bool trainingMode
+        +Color bannerColor
+        +String backgroundURL
+        +AudioPlayer player
+        +GameInstance gameInstance
+        +playMusic(String path)
+        +quitTraining()
+        +setCurrentPlayerScore(int scoreGain)
+        +onMessageFromServer(EventData message)
+        +onMessageFromClient(EventData message)
+        +onStartGame()
+        +buildWidget(BuildContext context)
+        @@override build(BuildContext context)
+}
+
+class FlameGamePage{
+    +FlameGameInstance gameInstance
+    +overlayWidgets()
+    @@override build(BuildContext context)
+}
+
+note for GamePage "GamePage handle all methods used for games :\n - all the network messages (receiving, end of game and start of game)\n- play music\n- handle training end\n- handle banner text for player (replicated in real time)\n- visual widgets structure"
+note for FlameGamePage "FlameGamePage inherit all methods from GamePage but add some new features :\n- add Flame Game Engine canvas in the widgets structure\n - handle overlays for the game\n - have a reference to a gameinstance that is used to draw visuals, animation and interactions."
+
+GamePage <|-- CapyQuizPage
+FlameGamePage <|-- ArrowSwipingPage
+FlameGamePage <|-- ChooseGoodSidePage
+FlameGamePage <|-- EatThatCheesePage
+FlameGamePage <|-- FaceGuessPage
+FlameGamePage <|-- FruitsSlashPage
+FlameGamePage <|-- SafeLandingPage
+FlameGamePage <|-- TrainTallyPage
 ```
 
 # 📟 Demonstration :
